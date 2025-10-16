@@ -503,7 +503,7 @@
             e.preventDefault();
 
             const dados = {
-                nome_associado: document.getElementById('nome_associado').value,
+                nome_associado: document.getElementById('nome_beneficiario').value,
                 placa: document.getElementById('placa').value,
                 veiculo: document.getElementById('veiculo').value,
                 valor_fipe: parseFloat(document.getElementById('valor_fipe').value),
@@ -791,7 +791,7 @@
         async function gerarPDF() {
             // Criar elemento temporário para o PDF
             const resultadoDiv = document.getElementById('resultado');
-            const nomeAssociado = document.getElementById('nome_associado').value;
+            const nomeAssociado = document.getElementById('nome_beneficiario').value;
             const placa = document.getElementById('placa').value;
             
             // Preparar conteúdo HTML para PDF
