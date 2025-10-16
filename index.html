@@ -544,20 +544,183 @@
             };
 
             try {
-                const response = await fetch('/api/calcular', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(dados)
-                });
-
-                const result = await response.json();
+                const result = calcularIndenizacao(dados);
                 exibirResultado(result);
             } catch (error) {
                 alert('Erro ao calcular: ' + error.message);
             }
         });
+
+        function calcularIndenizacao(dados) {
+            // Valor base
+            let valor_base = dados.valor_fipe;
+            let valor_fipe_original = dados.valor_fipe;
+            
+            // Depreciações
+            let depreciacoes_aplicadas = [];
+            let total_depreciacao = 0;
+            
+            if (dados.leilao_sinistro) {
+                let valor_dep = valor_base * 0.25;
+                depreciacoes_aplicadas.push({
+                    tipo: 'Veículo de Leilão por Sinistro',
+                    percentual: 0.25,
+                    valor: valor_dep
+                });
+                total_depreciacao += valor_dep;
+            }
+            
+            if (dados.leilao_financeiro) {
+                let valor_dep = valor_base * 0.15;
+                depreciacoes_aplicadas.push({
+                    tipo: 'Veículo de Leilão Financeiro',
+                    percentual: 0.15,
+                    valor: valor_dep
+                });
+                total_depreciacao += valor_dep;
+            }
+            
+            if (dados.beneficio_fiscal) {
+                let valor_dep = valor_base * 0.20;
+                depreciacoes_aplicadas.push({
+                    tipo: 'Benefício Fiscal IPI/ICMS',
+                    percentual: 0.20,
+                    valor: valor_dep
+                });
+                total_depreciacao += valor_dep;
+            }
+            
+            if (dados.incendiado_submerso) {
+                let valor_dep = valor_base * 0.30;
+                depreciacoes_aplicadas.push({
+                    tipo: 'Incendiado/Submerso após Roubo',
+                    percentual: 0.30,
+                    valor: valor_dep
+                });
+                total_depreciacao += valor_dep;
+            }
+            
+            if (dados.rodas_som_sem_rastreador) {
+                let valor_dep = valor_base * 0.20;
+                depreciacoes_aplicadas.push({
+                    tipo: 'Rodas/Som sem Rastreador',
+                    percentual: 0.20,
+                    valor: valor_dep
+                });
+                total_depreciacao += valor_dep;
+            }
+            
+            if (dados.reducao_cota_valor && dados.reducao_cota_valor > 0) {
+                depreciacoes_aplicadas.push({
+                    tipo: 'Redução de Cota',
+                    percentual: 0,
+                    valor: dados.reducao_cota_valor
+                });
+                total_depreciacao += dados.reducao_cota_valor;
+            }
+            
+            // Valor após depreciações
+            let valor_apos_depreciacao = valor_base - total_depreciacao;
+            
+            // Descontos
+            let descontos_itens = [];
+            let total_descontos = 0;
+            
+            if (dados.contribuicao_mensal && dados.contribuicao_mensal > 0) {
+                descontos_itens.push({
+                    descricao: 'Contribuição Mensal',
+                    valor: dados.contribuicao_mensal
+                });
+                total_descontos += dados.contribuicao_mensal;
+            }
+            
+            if (dados.honorarios_despachante && dados.honorarios_despachante > 0) {
+                descontos_itens.push({
+                    descricao: 'Honorários Despachante',
+                    valor: dados.honorarios_despachante
+                });
+                total_descontos += dados.honorarios_despachante;
+            }
+            
+            if (dados.debitos_veiculo && dados.debitos_veiculo > 0) {
+                descontos_itens.push({
+                    descricao: 'Débitos do Veículo',
+                    valor: dados.debitos_veiculo
+                });
+                total_descontos += dados.debitos_veiculo;
+            }
+            
+            if (dados.saldo_financiamento && dados.saldo_financiamento > 0) {
+                descontos_itens.push({
+                    descricao: 'Saldo Financiamento',
+                    valor: dados.saldo_financiamento
+                });
+                total_descontos += dados.saldo_financiamento;
+            }
+            
+            if (dados.outros_descontos && dados.outros_descontos > 0) {
+                descontos_itens.push({
+                    descricao: 'Outros Descontos',
+                    valor: dados.outros_descontos
+                });
+                total_descontos += dados.outros_descontos;
+            }
+            
+            // Valor final
+            let valor_final = valor_apos_depreciacao - total_descontos;
+            
+            // Prazo de pagamento (exemplo: 30 dias úteis)
+            let prazo_dias_uteis = 30;
+            
+            // Antecipação
+            let taxa_mensal = dados.taxa_desconto_mensal || 0.05; // 5% padrão
+            let dias_antecipacao = prazo_dias_uteis;
+            let taxa_desconto = (taxa_mensal / 30) * dias_antecipacao;
+            let desconto_antecipacao = valor_final * taxa_desconto;
+            let valor_antecipado = valor_final - desconto_antecipacao;
+            
+            // Requisitos e observações
+            let requisitos_criticos = [];
+            let observacoes = [];
+            
+            if (!dados.rastreador_instalado && dados.rodas_som_sem_rastreador) {
+                observacoes.push('⚠️ Depreciação de Rodas/Som aplicada devido à ausência de rastreador');
+            }
+            
+            if (valor_final < 0) {
+                requisitos_criticos.push('❌ Valor final negativo! Verifique os descontos e depreciações.');
+            }
+            
+            return {
+                valor_final: valor_final,
+                calculos: {
+                    valor_fipe_original: valor_fipe_original,
+                    valor_apos_depreciacao: valor_apos_depreciacao
+                },
+                depreciacao: {
+                    aplicadas: depreciacoes_aplicadas,
+                    total: total_depreciacao
+                },
+                descontos: {
+                    itens: descontos_itens,
+                    total: total_descontos
+                },
+                prazo_pagamento: {
+                    prazo_total_dias_uteis: prazo_dias_uteis,
+                    categoria: 'Padrão'
+                },
+                antecipacao: {
+                    valor_antecipado: valor_antecipado,
+                    desconto: desconto_antecipacao,
+                    taxa_desconto_pct: taxa_desconto * 100,
+                    taxa_mensal_pct: taxa_mensal * 100
+                },
+                requisitos: {
+                    criticos: requisitos_criticos
+                },
+                observacoes: observacoes
+            };
+        }
 
         function exibirResultado(result) {
             resultado.classList.add('show');
