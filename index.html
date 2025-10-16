@@ -438,6 +438,25 @@
                 
                 <div id="alertas"></div>
 
+                <!-- Identificação do Sinistro -->
+                <div class="info-box" style="background: #fff9e6; border-left: 4px solid #ffc107;">
+                    <h4 style="color: #1e5799; margin-bottom: 10px;">📋 Identificação do Sinistro</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <strong>Beneficiário:</strong> <span id="resultNomeBeneficiario"></span>
+                        </div>
+                        <div>
+                            <strong>Placa do Veículo:</strong> <span id="resultPlaca"></span>
+                        </div>
+                        <div>
+                            <strong>Veículo:</strong> <span id="resultVeiculo"></span>
+                        </div>
+                        <div>
+                            <strong>Tipo de Sinistro:</strong> <span id="resultTipoSinistro"></span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="valor-destaque">
                     <h3>Valor Líquido da Indenização</h3>
                     <div class="valor" id="valorLiquido">R$ 0,00</div>
@@ -709,6 +728,12 @@
         function exibirResultado(result) {
             resultado.classList.add('show');
             resultado.scrollIntoView({ behavior: 'smooth' });
+
+            // Preencher identificação do sinistro
+            document.getElementById('resultNomeBeneficiario').textContent = document.getElementById('nome_beneficiario').value;
+            document.getElementById('resultPlaca').textContent = document.getElementById('placa').value;
+            document.getElementById('resultVeiculo').textContent = document.getElementById('veiculo').value;
+            document.getElementById('resultTipoSinistro').textContent = document.getElementById('tipo_sinistro').value;
 
             // Alertas
             const alertas = document.getElementById('alertas');
