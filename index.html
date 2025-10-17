@@ -846,7 +846,177 @@
         }
 
         function imprimirResultado() {
-            window.print();
+            if (!window.ultimoCalculo) {
+                alert('Por favor, calcule a indenização primeiro!');
+                return;
+            }
+            
+            const dados = window.ultimoCalculo;
+            
+            // Criar janela de impressão com o mesmo conteúdo do PDF
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Cenário 01: ${dados.dados_sinistro.nome}</title>
+                    <meta charset="UTF-8">
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 40px;
+                            color: #333;
+                        }
+                        h1 {
+                            text-align: center;
+                            font-size: 24px;
+                            margin-bottom: 30px;
+                        }
+                        h2 {
+                            font-size: 18px;
+                            margin-top: 30px;
+                            margin-bottom: 15px;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-bottom: 30px;
+                        }
+                        th, td {
+                            border: 1px solid #999;
+                            padding: 10px;
+                            text-align: left;
+                        }
+                        th {
+                            background-color: #E0E0E0;
+                            font-weight: bold;
+                        }
+                        td:last-child {
+                            text-align: right;
+                        }
+                        tr:last-child td {
+                            font-weight: bold;
+                        }
+                        @media print {
+                            body { margin: 20px; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Cenário 01: ${dados.dados_sinistro.nome}</h1>
+                    
+                    <h2>Dados do Sinistro</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Descrição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Associado</td>
+                                <td>${dados.dados_sinistro.nome}</td>
+                            </tr>
+                            <tr>
+                                <td>Veículo</td>
+                                <td>${dados.dados_sinistro.veiculo}</td>
+                            </tr>
+                            <tr>
+                                <td>Placa</td>
+                                <td>${dados.dados_sinistro.placa}</td>
+                            </tr>
+                            <tr>
+                                <td>Valor FIPE</td>
+                                <td>R$ ${dados.dados_sinistro.valor_fipe.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td>Entrega da Documentação</td>
+                                <td>${dados.dados_sinistro.data_entrega_documentacao}</td>
+                            </tr>
+                            <tr>
+                                <td>Limite para Pagamento</td>
+                                <td>${dados.dados_sinistro.limite_pagamento} (${dados.dados_sinistro.dias_uteis} dias úteis)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h2>Composição dos Descontos</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Valor (R$)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>12 Contribuições</td>
+                                <td>${dados.descontos.contribuicoes.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td>Despachante</td>
+                                <td>${dados.descontos.despachante.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td>Prévia Financiamento</td>
+                                <td>${dados.descontos.financiamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td>Baixa do Gravame</td>
+                                <td>${dados.descontos.gravame.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td>2ª Via ATPVE</td>
+                                <td>${dados.descontos.atpve.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td>Total de Descontos</td>
+                                <td>${dados.descontos.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h2>Cálculo da Antecipação</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Métrica</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Valor a Receber em ${dados.dados_sinistro.dias_uteis} Dias</td>
+                                <td>R$ ${dados.valor_liquido.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td>Taxa Implícita Mensal (${dados.dados_sinistro.dias_uteis} dias)</td>
+                                <td>${dados.taxa_implicita_mensal.toFixed(2)}%</td>
+                            </tr>
+                            <tr>
+                                <td>Taxa Implícita Anual</td>
+                                <td>${dados.taxa_implicita_anual.toFixed(2)}%</td>
+                            </tr>
+                            <tr>
+                                <td>Valor Antecipado (Pagamento Imediato)</td>
+                                <td>R$ ${dados.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td>Desconto Aplicado</td>
+                                <td>R$ ${dados.desconto_aplicado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            
+            // Aguardar carregamento e imprimir
+            setTimeout(() => {
+                printWindow.print();
+            }, 250);
         }
 
         async function gerarPDF() {
