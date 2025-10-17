@@ -306,16 +306,9 @@
                                 <input type="text" id="nome_beneficiario" required>
                             </div>
                             <div class="form-group">
-                                <label>Data de Entrega da Documentação:</label>
-                                <input type="date" id="data_entrega_documentacao" required>
+                                <label>Data da Abertura do Sinistro:</label>
+                                <input type="date" id="data_abertura" required>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Dias Úteis para Pagamento:</label>
-                            <select id="dias_uteis_pagamento" required>
-                                <option value="60">60 dias úteis</option>
-                                <option value="90" selected>90 dias úteis</option>
-                            </select>
                         </div>
                     </div>
 
@@ -379,47 +372,40 @@
 
                     <!-- Descontos -->
                     <div class="form-section">
-                        <h3>Composição dos Descontos</h3>
+                        <h3>Descontos Obrigatórios</h3>
                         <div class="grid-2">
                             <div class="form-group">
-                                <label>12 Contribuições (R$):</label>
-                                <input type="number" id="doze_contribuicoes" step="0.01" value="0">
+                                <label>Contribuição Mensal (R$):</label>
+                                <input type="number" id="contribuicao_mensal" step="0.01" required>
                             </div>
                             <div class="form-group">
-                                <label>Despachante (R$):</label>
-                                <input type="number" id="despachante" step="0.01" value="120">
+                                <label>Honorários Despachante (R$):</label>
+                                <input type="number" id="honorarios_despachante" step="0.01" value="120">
                             </div>
                         </div>
                         <div class="grid-2">
                             <div class="form-group">
-                                <label>Prévia Financiamento (R$):</label>
-                                <input type="number" id="previa_financiamento" step="0.01" value="0">
+                                <label>Débitos do Veículo (R$):</label>
+                                <input type="number" id="debitos_veiculo" step="0.01" value="0">
                             </div>
                             <div class="form-group">
-                                <label>Baixa do Gravame (R$):</label>
-                                <input type="number" id="baixa_gravame" step="0.01" value="0">
+                                <label>Saldo Financiamento (R$):</label>
+                                <input type="number" id="saldo_financiamento" step="0.01" value="0">
                             </div>
                         </div>
-                        <div class="grid-2">
-                            <div class="form-group">
-                                <label>2ª Via ATPVE (R$):</label>
-                                <input type="number" id="segunda_via_atpve" step="0.01" value="0">
-                            </div>
-                            <div class="form-group">
-                                <label>Redução de Cota (R$):</label>
-                                <input type="number" id="reducao_cota_desconto" step="0.01" value="0">
-                            </div>
+                        <div class="form-group">
+                            <label>Outros Descontos (R$):</label>
+                            <input type="number" id="outros_descontos" step="0.01" value="0">
                         </div>
                     </div>
 
-                    <!-- Nota sobre Antecipação -->
+                    <!-- Antecipação -->
                     <div class="form-section">
-                        <div style="background: #e3f2fd; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3;">
-                            <strong>📊 Sobre a Antecipação:</strong>
-                            <p style="margin-top: 8px; color: #666; font-size: 14px;">
-                                O cálculo utiliza uma taxa de desconto fixa de <strong>12,7%</strong> sobre o valor a receber, 
-                                conforme padrão estabelecido para antecipação de indenizações SMT.
-                            </p>
+                        <h3>Configuração de Antecipação</h3>
+                        <div class="form-group">
+                            <label>Taxa de Desconto Mensal (%):</label>
+                            <input type="number" id="taxa_desconto_mensal" step="0.01" min="4" max="6" value="5" required>
+                            <small style="color: #666; display: block; margin-top: 5px;">Mínimo: 4% | Máximo: 6%</small>
                         </div>
                     </div>
 
@@ -541,22 +527,21 @@
                 veiculo: document.getElementById('veiculo').value,
                 valor_fipe: parseFloat(document.getElementById('valor_fipe').value),
                 tipo_sinistro: document.getElementById('tipo_sinistro').value,
-                data_entrega_documentacao: document.getElementById('data_entrega_documentacao').value,
-                dias_uteis_pagamento: parseInt(document.getElementById('dias_uteis_pagamento').value),
                 
                 leilao_sinistro: document.getElementById('leilao_sinistro').checked,
                 leilao_financeiro: document.getElementById('leilao_financeiro').checked,
                 beneficio_fiscal: document.getElementById('beneficio_fiscal').checked,
                 incendiado_submerso: document.getElementById('incendiado_submerso').checked,
                 rodas_som_sem_rastreador: document.getElementById('rodas_som_sem_rastreador').checked,
-                reducao_cota_valor: parseFloat(document.getElementById('reducao_cota_valor').value) || 0,
+                reducao_cota_valor: parseFloat(document.getElementById('reducao_cota_valor').value),
                 
-                doze_contribuicoes: parseFloat(document.getElementById('doze_contribuicoes').value) || 0,
-                despachante: parseFloat(document.getElementById('despachante').value) || 0,
-                previa_financiamento: parseFloat(document.getElementById('previa_financiamento').value) || 0,
-                baixa_gravame: parseFloat(document.getElementById('baixa_gravame').value) || 0,
-                segunda_via_atpve: parseFloat(document.getElementById('segunda_via_atpve').value) || 0,
-                reducao_cota_desconto: parseFloat(document.getElementById('reducao_cota_desconto').value) || 0,
+                contribuicao_mensal: parseFloat(document.getElementById('contribuicao_mensal').value),
+                honorarios_despachante: parseFloat(document.getElementById('honorarios_despachante').value),
+                debitos_veiculo: parseFloat(document.getElementById('debitos_veiculo').value),
+                saldo_financiamento: parseFloat(document.getElementById('saldo_financiamento').value),
+                outros_descontos: parseFloat(document.getElementById('outros_descontos').value),
+                
+                taxa_desconto_mensal: parseFloat(document.getElementById('taxa_desconto_mensal').value) / 100,
                 
                 rastreador_instalado: document.getElementById('rastreador_instalado').checked
             };
@@ -570,14 +555,11 @@
         });
 
         function calcularIndenizacao(dados) {
-            // Constantes
-            const TAXA_DESCONTO_FIXA = 0.127; // 12,7% fixo
-            
-            // Valor FIPE original
-            let valor_fipe_original = dados.valor_fipe;
+            // Valor base
             let valor_base = dados.valor_fipe;
+            let valor_fipe_original = dados.valor_fipe;
             
-            // Depreciações (opcionais, manter da versão anterior)
+            // Depreciações
             let depreciacoes_aplicadas = [];
             let total_depreciacao = 0;
             
@@ -633,7 +615,7 @@
             
             if (dados.reducao_cota_valor && dados.reducao_cota_valor > 0) {
                 depreciacoes_aplicadas.push({
-                    tipo: 'Redução de Cota (Depreciação)',
+                    tipo: 'Redução de Cota',
                     percentual: 0,
                     valor: dados.reducao_cota_valor
                 });
@@ -643,105 +625,80 @@
             // Valor após depreciações
             let valor_apos_depreciacao = valor_base - total_depreciacao;
             
-            // Composição dos Descontos (conforme exemplos)
+            // Descontos
             let descontos_itens = [];
             let total_descontos = 0;
             
-            if (dados.doze_contribuicoes && dados.doze_contribuicoes > 0) {
+            if (dados.contribuicao_mensal && dados.contribuicao_mensal > 0) {
                 descontos_itens.push({
-                    descricao: '12 Contribuições',
-                    valor: dados.doze_contribuicoes
+                    descricao: 'Contribuição Mensal',
+                    valor: dados.contribuicao_mensal
                 });
-                total_descontos += dados.doze_contribuicoes;
+                total_descontos += dados.contribuicao_mensal;
             }
             
-            if (dados.despachante && dados.despachante > 0) {
+            if (dados.honorarios_despachante && dados.honorarios_despachante > 0) {
                 descontos_itens.push({
-                    descricao: 'Despachante',
-                    valor: dados.despachante
+                    descricao: 'Honorários Despachante',
+                    valor: dados.honorarios_despachante
                 });
-                total_descontos += dados.despachante;
+                total_descontos += dados.honorarios_despachante;
             }
             
-            if (dados.previa_financiamento && dados.previa_financiamento > 0) {
+            if (dados.debitos_veiculo && dados.debitos_veiculo > 0) {
                 descontos_itens.push({
-                    descricao: 'Prévia Financiamento',
-                    valor: dados.previa_financiamento
+                    descricao: 'Débitos do Veículo',
+                    valor: dados.debitos_veiculo
                 });
-                total_descontos += dados.previa_financiamento;
+                total_descontos += dados.debitos_veiculo;
             }
             
-            if (dados.baixa_gravame && dados.baixa_gravame > 0) {
+            if (dados.saldo_financiamento && dados.saldo_financiamento > 0) {
                 descontos_itens.push({
-                    descricao: 'Baixa do Gravame',
-                    valor: dados.baixa_gravame
+                    descricao: 'Saldo Financiamento',
+                    valor: dados.saldo_financiamento
                 });
-                total_descontos += dados.baixa_gravame;
+                total_descontos += dados.saldo_financiamento;
             }
             
-            if (dados.segunda_via_atpve && dados.segunda_via_atpve > 0) {
+            if (dados.outros_descontos && dados.outros_descontos > 0) {
                 descontos_itens.push({
-                    descricao: '2ª Via ATPVE',
-                    valor: dados.segunda_via_atpve
+                    descricao: 'Outros Descontos',
+                    valor: dados.outros_descontos
                 });
-                total_descontos += dados.segunda_via_atpve;
+                total_descontos += dados.outros_descontos;
             }
             
-            if (dados.reducao_cota_desconto && dados.reducao_cota_desconto > 0) {
-                descontos_itens.push({
-                    descricao: 'Redução de Cota',
-                    valor: dados.reducao_cota_desconto
-                });
-                total_descontos += dados.reducao_cota_desconto;
-            }
+            // Valor final
+            let valor_final = valor_apos_depreciacao - total_descontos;
             
-            // Valor a Receber (conforme exemplos: FIPE - Depreciações - Descontos)
-            let valor_a_receber = valor_apos_depreciacao - total_descontos;
+            // Prazo de pagamento (exemplo: 30 dias úteis)
+            let prazo_dias_uteis = 30;
             
-            // Dias úteis para pagamento
-            let dias_uteis = dados.dias_uteis_pagamento || 90;
+            // Antecipação
+            let taxa_mensal = dados.taxa_desconto_mensal || 0.05; // 5% padrão
+            let dias_antecipacao = prazo_dias_uteis;
+            let taxa_desconto = (taxa_mensal / 30) * dias_antecipacao;
+            let desconto_antecipacao = valor_final * taxa_desconto;
+            let valor_antecipado = valor_final - desconto_antecipacao;
             
-            // Cálculo da Antecipação (desconto fixo de 12,7%)
-            let valor_antecipado = valor_a_receber * (1 - TAXA_DESCONTO_FIXA);
-            let desconto_aplicado = valor_a_receber - valor_antecipado;
-            let taxa_desconto_efetiva = (desconto_aplicado / valor_a_receber) * 100;
-            
-            // Calcular taxa implícita mensal
-            // valor_antecipado = valor_a_receber / (1 + taxa_mensal)^(dias/30)
-            // (1 + taxa_mensal)^(dias/30) = valor_a_receber / valor_antecipado
-            // taxa_mensal = (valor_a_receber / valor_antecipado)^(30/dias) - 1
-            let meses = dias_uteis / 30;
-            let taxa_implicita_mensal = Math.pow(valor_a_receber / valor_antecipado, 1 / meses) - 1;
-            let taxa_implicita_anual = taxa_implicita_mensal * 12;
-            
-            // Calcular data limite para pagamento
-            let data_entrega = new Date(dados.data_entrega_documentacao);
-            let data_limite = new Date(data_entrega);
-            // Simplificação: adicionar dias corridos (em produção, usar cálculo de dias úteis)
-            data_limite.setDate(data_limite.getDate() + Math.floor(dias_uteis * 1.4)); // Aproximação
-            
-            let data_limite_formatada = data_limite.toLocaleDateString('pt-BR');
-            
-            // Observações
+            // Requisitos e observações
+            let requisitos_criticos = [];
             let observacoes = [];
             
             if (!dados.rastreador_instalado && dados.rodas_som_sem_rastreador) {
                 observacoes.push('⚠️ Depreciação de Rodas/Som aplicada devido à ausência de rastreador');
             }
             
-            if (valor_a_receber < 0) {
-                observacoes.push('❌ Valor a receber negativo! Verifique os descontos e depreciações.');
+            if (valor_final < 0) {
+                requisitos_criticos.push('❌ Valor final negativo! Verifique os descontos e depreciações.');
             }
             
             return {
-                dados_sinistro: {
-                    associado: dados.nome_associado,
-                    veiculo: dados.veiculo,
-                    placa: dados.placa,
-                    valor_fipe: valor_fipe_original,
-                    data_entrega_documentacao: new Date(dados.data_entrega_documentacao).toLocaleDateString('pt-BR'),
-                    limite_pagamento: data_limite_formatada,
-                    dias_uteis: dias_uteis
+                valor_final: valor_final,
+                calculos: {
+                    valor_fipe_original: valor_fipe_original,
+                    valor_apos_depreciacao: valor_apos_depreciacao
                 },
                 depreciacao: {
                     aplicadas: depreciacoes_aplicadas,
@@ -751,13 +708,18 @@
                     itens: descontos_itens,
                     total: total_descontos
                 },
-                calculo_antecipacao: {
-                    valor_a_receber: valor_a_receber,
-                    taxa_implicita_mensal: taxa_implicita_mensal * 100,
-                    taxa_implicita_anual: taxa_implicita_anual * 100,
+                prazo_pagamento: {
+                    prazo_total_dias_uteis: prazo_dias_uteis,
+                    categoria: 'Padrão'
+                },
+                antecipacao: {
                     valor_antecipado: valor_antecipado,
-                    desconto_aplicado: desconto_aplicado,
-                    taxa_desconto_efetiva: taxa_desconto_efetiva
+                    desconto: desconto_antecipacao,
+                    taxa_desconto_pct: taxa_desconto * 100,
+                    taxa_mensal_pct: taxa_mensal * 100
+                },
+                requisitos: {
+                    criticos: requisitos_criticos
                 },
                 observacoes: observacoes
             };
