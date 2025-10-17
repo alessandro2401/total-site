@@ -768,49 +768,44 @@
             resultado.scrollIntoView({ behavior: 'smooth' });
 
             // Preencher identificação do sinistro
-            document.getElementById('resultNomeBeneficiario').textContent = document.getElementById('nome_beneficiario').value;
-            document.getElementById('resultPlaca').textContent = document.getElementById('placa').value;
-            document.getElementById('resultVeiculo').textContent = document.getElementById('veiculo').value;
+            document.getElementById('resultNomeBeneficiario').textContent = result.dados_sinistro.associado;
+            document.getElementById('resultPlaca').textContent = result.dados_sinistro.placa;
+            document.getElementById('resultVeiculo').textContent = result.dados_sinistro.veiculo;
             document.getElementById('resultTipoSinistro').textContent = document.getElementById('tipo_sinistro').value;
 
             // Alertas
             const alertas = document.getElementById('alertas');
             alertas.innerHTML = '';
             
-            if (result.requisitos.criticos.length > 0) {
-                result.requisitos.criticos.forEach(msg => {
-                    alertas.innerHTML += `<div class="alert alert-danger">${msg}</div>`;
-                });
-            }
-            
-            if (result.observacoes.length > 0) {
+            if (result.observacoes && result.observacoes.length > 0) {
                 result.observacoes.forEach(msg => {
                     alertas.innerHTML += `<div class="alert alert-warning">${msg}</div>`;
                 });
             }
 
-            // Valor Líquido
+            // Valor Líquido (Valor a Receber)
             document.getElementById('valorLiquido').textContent = 
-                'R$ ' + result.valor_final.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                'R$ ' + result.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
             
             document.getElementById('prazoPagamento').textContent = 
-                `Prazo: ${result.prazo_pagamento.prazo_total_dias_uteis} dias úteis (${result.prazo_pagamento.categoria})`;
+                `Prazo: ${result.dados_sinistro.dias_uteis} dias úteis | Limite: ${result.dados_sinistro.limite_pagamento}`;
 
             // Opções de Pagamento
             document.getElementById('opcao1').innerHTML = 
-                `Receber <strong>R$ ${result.valor_final.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong> em ${result.prazo_pagamento.prazo_total_dias_uteis} dias úteis`;
+                `Receber <strong>R$ ${result.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong> em ${result.dados_sinistro.dias_uteis} dias úteis`;
 
             document.getElementById('opcao2').innerHTML = 
-                `Receber <strong>R$ ${result.antecipacao.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong> HOJE (pagamento imediato)`;
+                `Receber <strong>R$ ${result.calculo_antecipacao.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong> HOJE (pagamento imediato)`;
 
             document.getElementById('detalhesAntecipacao').innerHTML = 
-                `<small>Desconto: R$ ${result.antecipacao.desconto.toLocaleString('pt-BR', {minimumFractionDigits: 2})} 
-                (${result.antecipacao.taxa_desconto_pct.toFixed(2)}%) | 
-                Taxa: ${result.antecipacao.taxa_mensal_pct.toFixed(2)}% ao mês</small>`;
+                `<small>Desconto: R$ ${result.calculo_antecipacao.desconto_aplicado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} 
+                (${result.calculo_antecipacao.taxa_desconto_efetiva.toFixed(2)}%) | 
+                Taxa Implícita: ${result.calculo_antecipacao.taxa_implicita_mensal.toFixed(2)}% ao mês 
+                (${result.calculo_antecipacao.taxa_implicita_anual.toFixed(2)}% ao ano)</small>`;
 
             // Valor FIPE
             document.getElementById('valorFipe').textContent = 
-                'R$ ' + result.calculos.valor_fipe_original.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                'R$ ' + result.dados_sinistro.valor_fipe.toLocaleString('pt-BR', {minimumFractionDigits: 2});
 
             // Depreciações
             const tabelaDepreciacoes = document.getElementById('tabelaDepreciacoes').querySelector('tbody');
