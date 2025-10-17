@@ -764,6 +764,9 @@
         }
 
         function exibirResultado(result) {
+            // Salvar resultado para uso na geração de PDF
+            window.ultimoCalculo = result;
+            
             resultado.classList.add('show');
             resultado.scrollIntoView({ behavior: 'smooth' });
 
