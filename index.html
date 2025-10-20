@@ -423,6 +423,23 @@
                         </div>
                     </div>
 
+                    <!-- Configurações do Financiamento -->
+                    <div class="form-section">
+                        <h3>Configurações do Financiamento (Antecipação)</h3>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Taxa de Juros Mensal (%):</label>
+                                <input type="number" id="taxa_juros" step="0.01" value="3.95" min="3.95" max="5">
+                                <small style="color: #666; font-size: 12px;">Entre 3,95% e 5%</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Número de Parcelas:</label>
+                                <input type="number" id="n_parcelas" value="4" min="1" max="12" readonly>
+                                <small style="color: #666; font-size: 12px;">Fixo em 4 parcelas</small>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Requisitos -->
                     <div class="form-section">
                         <h3>Requisitos</h3>
@@ -524,6 +541,26 @@
                 <div class="info-box">
                     <strong>Total de Descontos:</strong> <span id="totalDescontos"></span>
                 </div>
+
+                <h3>💳 Uso da Associação (Detalhamento do Financiamento - Antecipação)</h3>
+                <div class="info-box">
+                    <strong>Valor da Operação:</strong> <span id="valorOperacao"></span><br>
+                    <strong>Taxa de Juros:</strong> <span id="taxaJuros"></span><br>
+                    <strong>Total a Pagar:</strong> <span id="totalPagar"></span><br>
+                    <strong>Custo Financeiro:</strong> <span id="custoFinanceiro"></span>
+                </div>
+
+                <h4>Parcelas:</h4>
+                <table class="tabela-detalhes" id="tabelaParcelas">
+                    <thead>
+                        <tr>
+                            <th>Parcela</th>
+                            <th>Vencimento</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -558,7 +595,10 @@
                 segunda_via_atpve: parseFloat(document.getElementById('segunda_via_atpve').value) || 0,
                 reducao_cota_desconto: parseFloat(document.getElementById('reducao_cota_desconto').value) || 0,
                 
-                rastreador_instalado: document.getElementById('rastreador_instalado').checked
+                rastreador_instalado: document.getElementById('rastreador_instalado').checked,
+                
+                taxa_juros: parseFloat(document.getElementById('taxa_juros').value) / 100,
+                n_parcelas: parseInt(document.getElementById('n_parcelas').value)
             };
 
             try {
@@ -759,6 +799,41 @@
                     desconto_aplicado: desconto_aplicado,
                     taxa_desconto_efetiva: taxa_desconto_efetiva
                 },
+                financiamento: (() => {
+                    // Cálculo do financiamento (parcelamento da antecipação)
+                    const valor_operacao = valor_antecipado;
+                    const taxa_juros = dados.taxa_juros;
+                    const n_parcelas = dados.n_parcelas;
+                    const taxa_mensal_pct = taxa_juros * 100;
+                    
+                    // Fórmula Price: PMT = PV * (i * (1+i)^n) / ((1+i)^n - 1)
+                    const valor_parcela = valor_operacao * (taxa_juros * Math.pow(1 + taxa_juros, n_parcelas)) / (Math.pow(1 + taxa_juros, n_parcelas) - 1);
+                    const total_geral = valor_parcela * n_parcelas;
+                    const custo_financeiro = total_geral - valor_operacao;
+                    const percentual_custo = (custo_financeiro / valor_operacao) * 100;
+                    
+                    // Gerar parcelas
+                    const parcelas = [];
+                    const hoje = new Date();
+                    for (let i = 1; i <= n_parcelas; i++) {
+                        const vencimento = new Date(hoje);
+                        vencimento.setMonth(vencimento.getMonth() + i);
+                        parcelas.push({
+                            numero: i,
+                            vencimento: vencimento.toLocaleDateString('pt-BR'),
+                            valor: valor_parcela
+                        });
+                    }
+                    
+                    return {
+                        valor_operacao: valor_operacao,
+                        taxa_mensal_pct: taxa_mensal_pct,
+                        total_geral: total_geral,
+                        custo_financeiro: custo_financeiro,
+                        percentual_custo: percentual_custo,
+                        parcelas: parcelas
+                    };
+                })(),
                 observacoes: observacoes
             };
         }
@@ -843,6 +918,30 @@
 
             document.getElementById('totalDescontos').textContent = 
                 'R$ ' + result.descontos.total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            
+            // Financiamento
+            const fin = result.financiamento;
+            document.getElementById('valorOperacao').textContent = 
+                'R$ ' + fin.valor_operacao.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            document.getElementById('taxaJuros').textContent = 
+                fin.taxa_mensal_pct.toFixed(2) + '% ao mês';
+            document.getElementById('totalPagar').textContent = 
+                'R$ ' + fin.total_geral.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            document.getElementById('custoFinanceiro').textContent = 
+                'R$ ' + fin.custo_financeiro.toLocaleString('pt-BR', {minimumFractionDigits: 2}) + 
+                ' (' + fin.percentual_custo.toFixed(2) + '%)';
+            
+            const tabelaParcelas = document.getElementById('tabelaParcelas').querySelector('tbody');
+            tabelaParcelas.innerHTML = '';
+            fin.parcelas.forEach(p => {
+                tabelaParcelas.innerHTML += `
+                    <tr>
+                        <td>${p.numero}ª</td>
+                        <td>${p.vencimento}</td>
+                        <td>R$ ${p.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                    </tr>
+                `;
+            });
         }
 
         function imprimirResultado() {
