@@ -618,6 +618,12 @@
             
             try {
                 const dadosAPI = {
+                    // Dados do Beneficiário e Veículo
+                    nomeBeneficiario: dadosEntrada.nome || '',
+                    placaVeiculo: dadosEntrada.placa || '',
+                    modeloVeiculo: dadosEntrada.veiculo || '',
+                    
+                    // Dados do Sinistro
                     tipoSinistro: dadosEntrada.tipo_sinistro || 'Perda Total',
                     valorVeiculo: dadosEntrada.valor_fipe || 0,
                     valorFranquia: 0,
