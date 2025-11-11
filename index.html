@@ -1017,8 +1017,17 @@
             
             const dados = window.ultimoCalculo;
             
-            // Criar janela de impressão com o mesmo conteúdo do PDF
-            const printWindow = window.open('', '', 'width=800,height=600');
+            // Criar iframe oculto para impressão
+            const iframe = document.createElement('iframe');
+            iframe.style.position = 'fixed';
+            iframe.style.right = '0';
+            iframe.style.bottom = '0';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = 'none';
+            document.body.appendChild(iframe);
+            
+            const printWindow = iframe.contentWindow;
             printWindow.document.write(`
                 <!DOCTYPE html>
                 <html>
@@ -1209,7 +1218,11 @@
             // Aguardar carregamento e imprimir
             setTimeout(() => {
                 printWindow.print();
-            }, 250);
+                // Remover iframe após impressão
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                }, 1000);
+            }, 500);
         }
 
         async function gerarPDF() {
