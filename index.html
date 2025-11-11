@@ -1105,6 +1105,35 @@
                         </tbody>
                     </table>
                     
+                    <h2>Depreciações (Leilão)</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Valor (R$)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${dados.depreciacao.aplicadas.length > 0 ? 
+                                dados.depreciacao.aplicadas.map(dep => `
+                                    <tr>
+                                        <td>${dep.tipo}</td>
+                                        <td>${dep.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                                    </tr>
+                                `).join('') + `
+                                    <tr>
+                                        <td>Total de Depreciações</td>
+                                        <td>${dados.depreciacao.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                                    </tr>
+                                ` : `
+                                    <tr>
+                                        <td colspan="2" style="text-align: center;">Nenhuma depreciação aplicada</td>
+                                    </tr>
+                                `
+                            }
+                        </tbody>
+                    </table>
+                    
                     <h2>Composição dos Descontos</h2>
                     <table>
                         <thead>
