@@ -1017,17 +1017,13 @@
             
             const dados = window.ultimoCalculo;
             
-            // Criar iframe oculto para impressão
-            const iframe = document.createElement('iframe');
-            iframe.style.position = 'fixed';
-            iframe.style.right = '0';
-            iframe.style.bottom = '0';
-            iframe.style.width = '0';
-            iframe.style.height = '0';
-            iframe.style.border = 'none';
-            document.body.appendChild(iframe);
+            // Criar nova janela para impressão (mais compatível que iframe)
+            const printWindow = window.open('', '_blank', 'width=800,height=600');
             
-            const printWindow = iframe.contentWindow;
+            if (!printWindow) {
+                alert('Por favor, permita pop-ups para imprimir o documento.');
+                return;
+            }
             printWindow.document.write(`
                 <!DOCTYPE html>
                 <html>
@@ -1215,14 +1211,10 @@
             `);
             printWindow.document.close();
             
-            // Aguardar carregamento e imprimir
-            setTimeout(() => {
+            // Aguardar carregamento completo antes de imprimir
+            printWindow.onload = function() {
                 printWindow.print();
-                // Remover iframe após impressão
-                setTimeout(() => {
-                    document.body.removeChild(iframe);
-                }, 1000);
-            }, 500);
+            };
         }
 
         async function gerarPDF() {
