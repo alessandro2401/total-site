@@ -1017,14 +1017,16 @@
             
             const dados = window.ultimoCalculo;
             
-            // Criar nova janela para impressão (mais compatível que iframe)
+            // Criar nova janela para impressão
             const printWindow = window.open('', '_blank', 'width=800,height=600');
             
             if (!printWindow) {
                 alert('Por favor, permita pop-ups para imprimir o documento.');
                 return;
             }
-            printWindow.document.write(`
+            
+            // Construir HTML completo
+            const htmlContent = `
                 <!DOCTYPE html>
                 <html>
                 <head>
@@ -1208,13 +1210,18 @@
                     </table>
                 </body>
                 </html>
-            `);
+            `;
+            
+            // Escrever conteúdo na nova janela
+            printWindow.document.open();
+            printWindow.document.write(htmlContent);
             printWindow.document.close();
             
-            // Aguardar carregamento completo antes de imprimir
-            printWindow.onload = function() {
+            // Aguardar carregamento e imprimir
+            setTimeout(() => {
+                printWindow.focus();
                 printWindow.print();
-            };
+            }, 250);
         }
 
         async function gerarPDF() {
