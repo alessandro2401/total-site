@@ -282,6 +282,61 @@
                 page-break-inside: avoid;
             }
         }
+        
+        /* Estilos para impressão */
+        #print-container {
+            display: none;
+        }
+        
+        @media print {
+            body.printing > *:not(#print-container) {
+                display: none !important;
+            }
+            
+            body.printing #print-container {
+                display: block !important;
+                font-family: Arial, sans-serif;
+                margin: 40px;
+                color: #333;
+            }
+            
+            #print-container h1 {
+                text-align: center;
+                font-size: 24px;
+                margin-bottom: 30px;
+            }
+            
+            #print-container h2 {
+                font-size: 18px;
+                margin-top: 30px;
+                margin-bottom: 15px;
+            }
+            
+            #print-container table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 30px;
+            }
+            
+            #print-container th, #print-container td {
+                border: 1px solid #999;
+                padding: 10px;
+                text-align: left;
+            }
+            
+            #print-container th {
+                background-color: #E0E0E0;
+                font-weight: bold;
+            }
+            
+            #print-container td:last-child {
+                text-align: right;
+            }
+            
+            #print-container tr:last-child td {
+                font-weight: bold;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1017,64 +1072,11 @@
             
             const dados = window.ultimoCalculo;
             
-            // Criar nova janela para impressão
-            const printWindow = window.open('', '_blank', 'width=800,height=600');
-            
-            if (!printWindow) {
-                alert('Por favor, permita pop-ups para imprimir o documento.');
-                return;
-            }
-            
-            // Construir HTML completo
-            const htmlContent = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Cenário 01: ${dados.dados_sinistro.nome}</title>
-                    <meta charset="UTF-8">
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            margin: 40px;
-                            color: #333;
-                        }
-                        h1 {
-                            text-align: center;
-                            font-size: 24px;
-                            margin-bottom: 30px;
-                        }
-                        h2 {
-                            font-size: 18px;
-                            margin-top: 30px;
-                            margin-bottom: 15px;
-                        }
-                        table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            margin-bottom: 30px;
-                        }
-                        th, td {
-                            border: 1px solid #999;
-                            padding: 10px;
-                            text-align: left;
-                        }
-                        th {
-                            background-color: #E0E0E0;
-                            font-weight: bold;
-                        }
-                        td:last-child {
-                            text-align: right;
-                        }
-                        tr:last-child td {
-                            font-weight: bold;
-                        }
-                        @media print {
-                            body { margin: 20px; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <h1>Cenário 01: ${dados.dados_sinistro.nome}</h1>
+            // Criar container temporário para impressão
+            const printContainer = document.createElement('div');
+            printContainer.id = 'print-container';
+            printContainer.innerHTML = `
+                <h1>Cenário 01: ${dados.dados_sinistro.nome}</h1>
                     
                     <h2>Dados do Sinistro</h2>
                     <table>
@@ -1208,20 +1210,22 @@
                             </tr>
                         </tbody>
                     </table>
-                </body>
-                </html>
             `;
             
-            // Escrever conteúdo na nova janela
-            printWindow.document.open();
-            printWindow.document.write(htmlContent);
-            printWindow.document.close();
+            // Adicionar ao body
+            document.body.appendChild(printContainer);
             
-            // Aguardar carregamento e imprimir
+            // Adicionar classe para impressão
+            document.body.classList.add('printing');
+            
+            // Imprimir
+            window.print();
+            
+            // Remover após impressão
             setTimeout(() => {
-                printWindow.focus();
-                printWindow.print();
-            }, 250);
+                document.body.classList.remove('printing');
+                document.body.removeChild(printContainer);
+            }, 100);
         }
 
         async function gerarPDF() {
