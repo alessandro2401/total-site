@@ -1076,7 +1076,8 @@
             const printContainer = document.createElement('div');
             printContainer.id = 'print-container';
             printContainer.innerHTML = `
-                <h1>Cenário 01: ${dados.dados_sinistro.nome}</h1>
+                <h1>Cálculo para Indenização Financeira - Total</h1>
+                    <h2>Cenário 01: ${dados.dados_sinistro.nome}</h2>
                     
                     <h2>Dados do Sinistro</h2>
                     <table>
@@ -1189,25 +1190,16 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Valor a Receber em ${dados.dados_sinistro.dias_uteis} Dias</td>
-                                <td>R$ ${dados.valor_liquido.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
+                                <td>Valor a Receber em ${dados.dados_sinistro.dias_uteis} Dias</td1193	                                <td>R$ ${dados.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>                          </tr>
                             <tr>
-                                <td>Taxa Implícita Mensal (${dados.dados_sinistro.dias_uteis} dias)</td>
-                                <td>${dados.taxa_implicita_mensal.toFixed(2)}%</td>
-                            </tr>
+                                <td>Taxa Implícita Mensal (${dados.dados_sinistro.dias_uteis} dias)</1197	                                <td>${dados.calculo_antecipacao.taxa_implicita_mensal.toFixed(2)}%</td>                            </tr>
                             <tr>
-                                <td>Taxa Implícita Anual</td>
-                                <td>${dados.taxa_implicita_anual.toFixed(2)}%</td>
-                            </tr>
+                                <td>Taxa Implícita Anual</1201	                                <td>${dados.calculo_antecipacao.taxa_implicita_anual.toFixed(2)}%</td>                            </tr>
                             <tr>
                                 <td>Valor Antecipado (Pagamento Imediato)</td>
-                                <td>R$ ${dados.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
+1205	                                <td>R$ ${dados.calculo_antecipacao.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>                        </tr>
                             <tr>
-                                <td>Desconto Aplicado</td>
-                                <td>R$ ${dados.desconto_aplicado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
+                                <td>Desconto Aplicado</td1209	                                <td>R$ ${dados.calculo_antecipacao.desconto_aplicado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>                          </tr>
                         </tbody>
                     </table>
             `;
@@ -1299,7 +1291,8 @@
                     </style>
                 </head>
                 <body>
-                    <h1>Cenário 01: ${nomeAssociado}</h1>
+                    <h1>Cálculo para Indenização Financeira - Total</h1>
+                    <h2>Cenário 01: ${nomeAssociado}</h2>
                     
                     <h2>Dados do Sinistro</h2>
                     <table>
@@ -1418,10 +1411,20 @@
                 </html>
             `;
             
-            // Abrir em nova janela para impressão/PDF
-            const janela = window.open('', '_blank');
-            janela.document.write(conteudoPDF);
-            janela.document.close();
+            // Criar um Blob com o conteúdo HTML
+            const blob = new Blob([conteudoPDF], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            // Criar link temporário para download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Calculo_Indenizacao_Total_${nomeAssociado.replace(/\s+/g, '_')}.html`;
+            document.body.appendChild(a);
+            a.click();
+            
+            // Limpar
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>
