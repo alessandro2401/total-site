@@ -1188,19 +1188,26 @@
                                 <th>Valor</th>
                             </tr>
                         </thead>
-                        <tbody>
+                <tr>
+                                <td>Valor a Receber em ${dados.dados_sinistro.dias_uteis} Dias</td>
+                                <td>R$ ${dados.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
                             <tr>
-                                <td>Valor a Receber em ${dados.dados_sinistro.dias_uteis} Dias</td1193	                                <td>R$ ${dados.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>                          </tr>
+                                <td>Taxa Implícita Mensal (${dados.dados_sinistro.dias_uteis} dias)</td>
+                                <td>${dados.calculo_antecipacao.taxa_implicita_mensal.toFixed(2)}%</td>
+                            </tr>
                             <tr>
-                                <td>Taxa Implícita Mensal (${dados.dados_sinistro.dias_uteis} dias)</1197	                                <td>${dados.calculo_antecipacao.taxa_implicita_mensal.toFixed(2)}%</td>                            </tr>
-                            <tr>
-                                <td>Taxa Implícita Anual</1201	                                <td>${dados.calculo_antecipacao.taxa_implicita_anual.toFixed(2)}%</td>                            </tr>
+                                <td>Taxa Implícita Anual</td>
+                                <td>${dados.calculo_antecipacao.taxa_implicita_anual.toFixed(2)}%</td>
+                            </tr>
                             <tr>
                                 <td>Valor Antecipado (Pagamento Imediato)</td>
-1205	                                <td>R$ ${dados.calculo_antecipacao.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>                        </tr>
+                                <td>R$ ${dados.calculo_antecipacao.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
                             <tr>
-                                <td>Desconto Aplicado</td1209	                                <td>R$ ${dados.calculo_antecipacao.desconto_aplicado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>                          </tr>
-                        </tbody>
+                                <td>Desconto Aplicado</td>
+                                <td>R$ ${dados.calculo_antecipacao.desconto_aplicado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>                        </tbody>
                     </table>
             `;
             
