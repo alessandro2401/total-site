@@ -1245,74 +1245,146 @@
             // Criar conteúdo HTML para o PDF
             const element = document.createElement('div');
             element.innerHTML = `
-                <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; width: 100%; box-sizing: border-box;">
+                <div style="font-family: 'Segoe UI', Arial, sans-serif; padding: 20px; color: #333; width: 100%; box-sizing: border-box;">
                     <style>
-                        .pdf-card { page-break-inside: avoid; margin-bottom: 20px; }
-                        .pdf-header { page-break-after: avoid; }
+                        .pdf-card { page-break-inside: avoid; margin-bottom: 20px; background: #f8f9fa; border-radius: 8px; padding: 15px; border: 1px solid #e9ecef; }
+                        .pdf-header { page-break-after: avoid; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+                        .pdf-header h1 { color: #667eea; font-size: 24px; margin: 0; }
+                        .alert-box { background-color: #e0f2f1; color: #00695c; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; border-left: 4px solid #00695c; }
+                        .card-title { color: #667eea; font-size: 16px; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #dee2e6; padding-bottom: 5px; display: flex; align-items: center; }
+                        .grid-print { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+                        .field-label { font-size: 12px; color: #666; font-weight: bold; }
+                        .field-value { font-size: 14px; color: #333; margin-bottom: 5px; }
+                        .highlight-value { background: #e8eaf6; padding: 15px; text-align: center; border-radius: 8px; margin: 20px 0; page-break-inside: avoid; }
+                        .highlight-value h3 { color: #667eea; margin: 0 0 5px 0; font-size: 16px; }
+                        .highlight-value .value { color: #283593; font-size: 28px; font-weight: bold; }
+                        .options-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; page-break-inside: avoid; }
+                        .option-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: white; }
+                        .option-card.recommended { border: 2px solid #4caf50; background: #f1f8e9; position: relative; }
+                        .option-title { font-weight: bold; color: #1565c0; margin-bottom: 10px; font-size: 14px; }
+                        .option-value { font-size: 22px; font-weight: bold; color: #2e7d32; margin-bottom: 10px; }
+                        .option-details { font-size: 12px; color: #555; line-height: 1.4; }
+                        .recommendation-banner { background: #fff9c4; color: #fbc02d; padding: 10px; text-align: center; font-weight: bold; border-radius: 5px; margin-bottom: 20px; border: 1px solid #fbc02d; color: #f57f17; page-break-inside: avoid; }
+                        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+                        th { background: #f1f1f1; text-align: left; padding: 8px; color: #555; }
+                        td { border-bottom: 1px solid #eee; padding: 8px; }
+                        .text-right { text-align: right; }
+                        .footer-print { margin-top: 30px; font-size: 10px; color: #999; text-align: center; border-top: 1px solid #eee; padding-top: 10px; }
                         tr { page-break-inside: avoid; }
                     </style>
-                    <div class="pdf-header" style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #1e5799; padding-bottom: 10px;">
-                        <h1 style="color: #1e5799; margin: 0;">Cálculo para Indenização Financeira - Total</h1>
-                        <p style="color: #666; margin: 5px 0;">Movimento Mais Brasil - Socorro Mútuo Total</p>
+
+                    <div class="pdf-header">
+                        <div>
+                            <h1>Relatório de Cálculo SMA</h1>
+                            <div style="font-size: 12px; color: #666;">Movimento Mais Brasil - Socorro Mútuo Total</div>
+                        </div>
+                        <div style="font-size: 12px; color: #666;">Data: ${new Date().toLocaleDateString('pt-BR')}</div>
                     </div>
 
-                    <div class="pdf-card" style="background: #f8f9fa; padding: 15px; border-radius: 5px;">
-                        <h3 style="color: #1e5799; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 0;">Dados do Sinistro</h3>
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <tr>
-                                <td style="padding: 5px;"><strong>Beneficiário:</strong> ${dados.dados_sinistro.associado}</td>
-                                <td style="padding: 5px;"><strong>Veículo:</strong> ${dados.dados_sinistro.veiculo}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 5px;"><strong>Placa:</strong> ${dados.dados_sinistro.placa}</td>
-                                <td style="padding: 5px;"><strong>Valor FIPE:</strong> R$ ${dados.dados_sinistro.valor_fipe.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                        </table>
+                    <div class="alert-box">
+                        Cálculo baseado nos valores informados. Taxas e prazos podem variar conforme regulamento.
                     </div>
 
                     <div class="pdf-card">
-                        <h3 style="color: #1e5799; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 0;">Detalhamento Financeiro</h3>
-                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
-                            <tr style="background: #f1f1f1;">
-                                <th style="padding: 8px; text-align: left;">Descrição</th>
-                                <th style="padding: 8px; text-align: right;">Valor</th>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Valor Base (FIPE)</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">R$ ${dados.dados_sinistro.valor_fipe.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Total Depreciações</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; color: #dc3545;">- R$ ${dados.depreciacao.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Total Descontos</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; color: #dc3545;">- R$ ${dados.descontos.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            <tr style="background: #e3f2fd; font-weight: bold;">
-                                <td style="padding: 8px;">Valor Líquido a Receber</td>
-                                <td style="padding: 8px; text-align: right; color: #1e5799;">R$ ${dados.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                        </table>
+                        <div class="card-title">👤 Dados do Beneficiário</div>
+                        <div class="grid-print">
+                            <div>
+                                <div class="field-label">Nome:</div>
+                                <div class="field-value">${dados.dados_sinistro.associado}</div>
+                                <div class="field-label">Veículo:</div>
+                                <div class="field-value">${dados.dados_sinistro.veiculo}</div>
+                            </div>
+                            <div>
+                                <div class="field-label">Placa:</div>
+                                <div class="field-value">${dados.dados_sinistro.placa}</div>
+                                <div class="field-label">Data de Entrega Doc.:</div>
+                                <div class="field-value">${dados.dados_sinistro.data_entrega_documentacao}</div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="pdf-card">
-                        <h3 style="color: #1e5799; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 0;">Opções de Pagamento</h3>
-                        
-                        <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
-                            <strong>Opção 1: Aguardar Prazo Regulamentar</strong><br>
-                            Receber R$ ${dados.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})} em ${dados.dados_sinistro.dias_uteis} dias úteis.
-                        </div>
-
-                        <div style="border: 2px solid #28a745; background: #f0fff4; padding: 10px; border-radius: 5px;">
-                            <strong>Opção 2: Receber Antecipado (Recomendado)</strong><br>
-                            Receber R$ ${dados.calculo_antecipacao.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} HOJE.<br>
-                            <small>Desconto aplicado: R$ ${dados.calculo_antecipacao.desconto_aplicado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</small>
+                        <div class="card-title">📊 Valores do Sinistro</div>
+                        <div class="grid-print" style="grid-template-columns: 1fr 1fr 1fr;">
+                            <div>
+                                <div class="field-label">Valor FIPE:</div>
+                                <div class="field-value">R$ ${dados.dados_sinistro.valor_fipe.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                            </div>
+                            <div>
+                                <div class="field-label">Total Depreciações:</div>
+                                <div class="field-value" style="color: #d32f2f;">- R$ ${dados.depreciacao.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                            </div>
+                            <div>
+                                <div class="field-label">Total Descontos:</div>
+                                <div class="field-value" style="color: #d32f2f;">- R$ ${dados.descontos.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                            </div>
                         </div>
                     </div>
 
-                    <div style="font-size: 10px; color: #999; text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 10px;">
-                        Gerado em ${new Date().toLocaleString('pt-BR')}
+                    <div class="highlight-value">
+                        <h3>Valor Base para Cálculo (Líquido)</h3>
+                        <div class="value">R$ ${dados.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                        <div style="font-size: 12px; color: #666; margin-top: 5px;">Prazo Regulamentar: ${dados.dados_sinistro.dias_uteis} dias úteis</div>
+                    </div>
+
+                    <div class="card-title" style="margin-bottom: 15px;">⚡ Opções de Pagamento</div>
+                    
+                    <div class="options-container">
+                        <div class="option-card">
+                            <div class="option-title">Opção 1: Aguardar Prazo Regulamentar</div>
+                            <div class="option-value" style="color: #1976d2;">R$ ${dados.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                            <div class="option-details">
+                                <p><strong>Prazo:</strong> ${dados.dados_sinistro.dias_uteis} dias úteis</p>
+                                <p><strong>Vantagens:</strong> Valor integral sem desconto.</p>
+                                <p><strong>Desvantagens:</strong> Tempo de espera maior.</p>
+                            </div>
+                        </div>
+
+                        <div class="option-card recommended">
+                            <div style="position: absolute; top: -10px; right: 10px; background: #4caf50; color: white; padding: 2px 8px; font-size: 10px; border-radius: 4px;">RECOMENDADO</div>
+                            <div class="option-title" style="color: #2e7d32;">Opção 2: Receber Antecipado</div>
+                            <div class="option-value">R$ ${dados.calculo_antecipacao.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                            <div class="option-details">
+                                <p><strong>Prazo:</strong> Imediato (Hoje)</p>
+                                <p><strong>Vantagens:</strong> Dinheiro na mão agora.</p>
+                                <p><strong>Desconto:</strong> R$ ${dados.calculo_antecipacao.desconto_aplicado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} (${dados.calculo_antecipacao.taxa_desconto_efetiva.toFixed(2)}%)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-banner">
+                        Recomendação: A Opção 2 oferece liquidez imediata e elimina o risco de espera.
+                    </div>
+
+                    <div class="pdf-card">
+                        <div class="card-title">💳 Uso da Associação (Detalhamento do Financiamento - Antecipação)</div>
+                        <div style="background: #e8eaf6; padding: 10px; border-radius: 5px; margin-bottom: 10px; font-size: 12px;">
+                            <strong>Valor da Operação:</strong> R$ ${dados.calculo_antecipacao.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} | 
+                            <strong>Taxa de Juros:</strong> ${dados.financiamento.taxa_mensal_pct.toFixed(2)}% a.m. | 
+                            <strong>Custo Financeiro:</strong> R$ ${dados.financiamento.custo_financeiro.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Parcela</th>
+                                    <th>Vencimento</th>
+                                    <th class="text-right">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${dados.financiamento.parcelas.map(p => `
+                                    <tr>
+                                        <td>${p.numero}</td>
+                                        <td>${p.vencimento}</td>
+                                        <td class="text-right">R$ ${p.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="footer-print">
+                        Administradora Mutual - Sistema de Cálculo SMT | Gerado em ${new Date().toLocaleString('pt-BR')}
                     </div>
                 </div>
             `;
