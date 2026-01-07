@@ -367,14 +367,15 @@
                         </div>
                         <div class="form-group">
                             <label>Dias Úteis para Pagamento:</label>
-                            <select id="dias_uteis_pagamento" required>
+                            <select id="dias_uteis_pagamento">
+                                <option value="90">90 dias úteis</option>
                                 <option value="60">60 dias úteis</option>
-                                <option value="90" selected>90 dias úteis</option>
+                                <option value="30">30 dias úteis</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Identificação -->
+                    <!-- Identificação do Veículo -->
                     <div class="form-section">
                         <h3>Identificação do Veículo</h3>
                         <div class="grid-2">
@@ -393,17 +394,17 @@
                         </div>
                         <div class="form-group">
                             <label>Tipo de Sinistro:</label>
-                            <select id="tipo_sinistro" required>
-                                <option value="">Selecione...</option>
+                            <select id="tipo_sinistro">
                                 <option value="Roubo">Roubo</option>
                                 <option value="Furto">Furto</option>
-                                <option value="Perda Total">Perda Total (Colisão/Capotamento)</option>
-                                <option value="Incêndio">Incêndio</option>
+                                <option value="Colisao">Colisão (Perda Total)</option>
+                                <option value="Incendio">Incêndio</option>
+                                <option value="Alagamento">Alagamento</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Depreciações -->
+                    <!-- Depreciações Aplicáveis -->
                     <div class="form-section">
                         <h3>Depreciações Aplicáveis</h3>
                         <div class="checkbox-group">
@@ -419,85 +420,71 @@
                             <label for="beneficio_fiscal">Benefício Fiscal IPI/ICMS (-20%)</label>
                         </div>
                         <div class="checkbox-group">
-                            <input type="checkbox" id="incendiado_submerso">
-                            <label for="incendiado_submerso">Incendiado/Submerso após Roubo (-30%)</label>
+                            <input type="checkbox" id="remarcado">
+                            <label for="remarcado">Veículo Remarcado (-20%)</label>
                         </div>
                         <div class="checkbox-group">
                             <input type="checkbox" id="rodas_som_sem_rastreador">
-                            <label for="rodas_som_sem_rastreador">Rodas/Som sem Rastreador (-20%)</label>
+                            <label for="rodas_som_sem_rastreador">Rodas/Som sem Rastreador (-10%)</label>
                         </div>
-                        <div class="form-group">
-                            <label>Redução de Cota (R$):</label>
-                            <input type="number" id="reducao_cota_valor" step="0.01" value="0">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="gnv">
+                            <label for="gnv">Kit Gás (GNV) (-5%)</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="antigo_fora_linha">
+                            <label for="antigo_fora_linha">Veículo Antigo/Fora de Linha (-10%)</label>
                         </div>
                     </div>
 
-                    <!-- Descontos -->
+                    <!-- Composição dos Descontos -->
                     <div class="form-section">
-                        <h3>Composição dos Descontos</h3>
+                        <h3>Composição dos Descontos (R$)</h3>
                         <div class="grid-2">
                             <div class="form-group">
-                                <label>12 Contribuições (R$):</label>
+                                <label>12 Contribuições:</label>
                                 <input type="number" id="doze_contribuicoes" step="0.01" value="0">
                             </div>
                             <div class="form-group">
-                                <label>Despachante (R$):</label>
-                                <input type="number" id="despachante" step="0.01" value="120">
+                                <label>Despachante:</label>
+                                <input type="number" id="despachante" step="0.01" value="0">
                             </div>
                         </div>
                         <div class="grid-2">
                             <div class="form-group">
-                                <label>Prévia Financiamento (R$):</label>
+                                <label>Prévia Financiamento:</label>
                                 <input type="number" id="previa_financiamento" step="0.01" value="0">
                             </div>
                             <div class="form-group">
-                                <label>Baixa do Gravame (R$):</label>
+                                <label>Baixa do Gravame:</label>
                                 <input type="number" id="baixa_gravame" step="0.01" value="0">
                             </div>
                         </div>
                         <div class="grid-2">
                             <div class="form-group">
-                                <label>2ª Via ATPVE (R$):</label>
+                                <label>2ª Via ATPVE:</label>
                                 <input type="number" id="segunda_via_atpve" step="0.01" value="0">
                             </div>
                             <div class="form-group">
-                                <label>Redução de Cota (R$):</label>
+                                <label>Redução de Cota:</label>
                                 <input type="number" id="reducao_cota_desconto" step="0.01" value="0">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Nota sobre Antecipação -->
+                    <!-- Parâmetros de Financiamento -->
                     <div class="form-section">
-                        <div style="background: #e3f2fd; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3;">
-                            <strong><svg style="display: inline-block; vertical-align: middle; margin-right: 6px;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg> Sobre a Antecipação:</strong>
-                            <p style="margin-top: 8px; color: #666; font-size: 14px;">
-                                O cálculo utiliza uma taxa de desconto fixa de <strong>12,7%</strong> sobre o valor a receber, 
-                                conforme padrão estabelecido para antecipação de indenizações SMT.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Configurações do Financiamento -->
-                    <div class="form-section">
-                        <h3>Configurações do Financiamento (Antecipação)</h3>
+                        <h3>Parâmetros de Financiamento (Antecipação)</h3>
                         <div class="grid-2">
                             <div class="form-group">
                                 <label>Taxa de Juros Mensal (%):</label>
-                                <input type="number" id="taxa_juros" step="0.01" value="3.95" min="3.95" max="5">
-                                <small style="color: #666; font-size: 12px;">Entre 3,95% e 5%</small>
+                                <input type="number" id="taxa_juros" step="0.01" value="3.95">
                             </div>
                             <div class="form-group">
                                 <label>Número de Parcelas:</label>
-                                <input type="number" id="n_parcelas" value="4" min="1" max="12" readonly>
-                                <small style="color: #666; font-size: 12px;">Fixo em 4 parcelas</small>
+                                <input type="number" id="n_parcelas" value="4">
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Requisitos -->
-                    <div class="form-section">
-                        <h3>Requisitos</h3>
                         <div class="checkbox-group">
                             <input type="checkbox" id="rastreador_instalado">
                             <label for="rastreador_instalado">Rastreador Instalado e Funcionando</label>
@@ -599,10 +586,12 @@
 
                 <h3>💳 Uso da Associação (Detalhamento do Financiamento - Antecipação)</h3>
                 <div class="info-box">
-                    <strong>Valor da Operação:</strong> <span id="valorOperacao"></span><br>
-                    <strong>Taxa de Juros:</strong> <span id="taxaJuros"></span><br>
-                    <strong>Total a Pagar:</strong> <span id="totalPagar"></span><br>
-                    <strong>Custo Financeiro:</strong> <span id="custoFinanceiro"></span>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div><strong>Valor da Operação:</strong> <span id="finValorOperacao"></span></div>
+                        <div><strong>Taxa de Juros:</strong> <span id="finTaxaJuros"></span></div>
+                        <div><strong>Total a Pagar:</strong> <span id="finTotalPagar"></span></div>
+                        <div><strong>Custo Financeiro:</strong> <span id="finCustoFinanceiro"></span></div>
+                    </div>
                 </div>
 
                 <h4>Parcelas:</h4>
@@ -621,28 +610,35 @@
     </div>
 
     <script>
-        const form = document.getElementById('formCalculadora');
-        const resultado = document.getElementById('resultado');
+        // Constantes
+        const TAXA_DESCONTO_FIXA = 0.127; // 12.7%
 
-        form.addEventListener('submit', async (e) => {
+        document.getElementById('formCalculadora').addEventListener('submit', function(e) {
             e.preventDefault();
+            calcularIndenizacao();
+        });
 
+        function calcularIndenizacao() {
+            // Coletar dados do formulário
             const dados = {
                 nome_associado: document.getElementById('nome_beneficiario').value,
-                placa: document.getElementById('placa').value,
-                veiculo: document.getElementById('veiculo').value,
-                valor_fipe: parseFloat(document.getElementById('valor_fipe').value),
-                tipo_sinistro: document.getElementById('tipo_sinistro').value,
                 data_entrega_documentacao: document.getElementById('data_entrega_documentacao').value,
                 dias_uteis_pagamento: parseInt(document.getElementById('dias_uteis_pagamento').value),
+                veiculo: document.getElementById('veiculo').value,
+                placa: document.getElementById('placa').value,
+                valor_fipe: parseFloat(document.getElementById('valor_fipe').value),
+                tipo_sinistro: document.getElementById('tipo_sinistro').value,
                 
+                // Depreciações
                 leilao_sinistro: document.getElementById('leilao_sinistro').checked,
                 leilao_financeiro: document.getElementById('leilao_financeiro').checked,
                 beneficio_fiscal: document.getElementById('beneficio_fiscal').checked,
-                incendiado_submerso: document.getElementById('incendiado_submerso').checked,
+                remarcado: document.getElementById('remarcado').checked,
                 rodas_som_sem_rastreador: document.getElementById('rodas_som_sem_rastreador').checked,
-                reducao_cota_valor: parseFloat(document.getElementById('reducao_cota_valor').value) || 0,
+                gnv: document.getElementById('gnv').checked,
+                antigo_fora_linha: document.getElementById('antigo_fora_linha').checked,
                 
+                // Descontos
                 doze_contribuicoes: parseFloat(document.getElementById('doze_contribuicoes').value) || 0,
                 despachante: parseFloat(document.getElementById('despachante').value) || 0,
                 previa_financiamento: parseFloat(document.getElementById('previa_financiamento').value) || 0,
@@ -650,154 +646,63 @@
                 segunda_via_atpve: parseFloat(document.getElementById('segunda_via_atpve').value) || 0,
                 reducao_cota_desconto: parseFloat(document.getElementById('reducao_cota_desconto').value) || 0,
                 
-                rastreador_instalado: document.getElementById('rastreador_instalado').checked,
-                
+                // Financiamento
                 taxa_juros: parseFloat(document.getElementById('taxa_juros').value) / 100,
-                n_parcelas: parseInt(document.getElementById('n_parcelas').value)
+                n_parcelas: parseInt(document.getElementById('n_parcelas').value),
+                rastreador_instalado: document.getElementById('rastreador_instalado').checked
             };
 
-            try {
-                const result = calcularIndenizacao(dados);
-                exibirResultado(result);
-                
-                // Enviar dados para API (registro no Google Sheets)
-                enviarParaAPI(dados, result);
-            } catch (error) {
-                alert('Erro ao calcular: ' + error.message);
-            }
-        });
-
-        // Função para enviar dados para a API
-        async function enviarParaAPI(dadosEntrada, resultado) {
-            const API_URL = 'https://api-calculadoras-sheets.vercel.app/api/registrar-calculo-smt';
-            
-            try {
-                const dadosAPI = {
-                    // Dados do Beneficiário e Veículo
-                    nomeBeneficiario: dadosEntrada.nome_associado || '',
-                    placaVeiculo: dadosEntrada.placa || '',
-                    modeloVeiculo: dadosEntrada.veiculo || '',
-                    
-                    // Dados do Sinistro
-                    tipoSinistro: dadosEntrada.tipo_sinistro || 'Perda Total',
-                    valorVeiculo: dadosEntrada.valor_fipe || 0,
-                    valorFranquia: 0,
-                    valorDespesas: resultado.descontos.total || 0,
-                    valorSalvados: 0,
-                    valorRecuperado: 0,
-                    valorIndenizacao: resultado.calculo_antecipacao.valor_a_receber || 0,
-                    valorAntecipado: resultado.calculo_antecipacao.valor_antecipado || 0,
-                    valorRestante: resultado.calculo_antecipacao.desconto_aplicado || 0,
-                    taxaJuros: dadosEntrada.taxa_juros * 100 || 0,
-                    numeroParcelas: dadosEntrada.n_parcelas || 0,
-                    valorParcela: resultado.financiamento.parcelas[0]?.valor || 0,
-                    totalPagar: resultado.financiamento.total_geral || 0,
-                    custoFinanceiro: resultado.financiamento.custo_financeiro || 0,
-                    percentualCusto: resultado.financiamento.percentual_custo || 0,
-                    
-                    // Parcelas
-                    parcela1Data: resultado.financiamento.parcelas[0]?.vencimento || '',
-                    parcela1Valor: resultado.financiamento.parcelas[0]?.valor || 0,
-                    parcela2Data: resultado.financiamento.parcelas[1]?.vencimento || '',
-                    parcela2Valor: resultado.financiamento.parcelas[1]?.valor || 0,
-                    parcela3Data: resultado.financiamento.parcelas[2]?.vencimento || '',
-                    parcela3Valor: resultado.financiamento.parcelas[2]?.valor || 0,
-                    parcela4Data: resultado.financiamento.parcelas[3]?.vencimento || '',
-                    parcela4Valor: resultado.financiamento.parcelas[3]?.valor || 0,
-                    
-                    // Metadados
-                    userAgent: navigator.userAgent,
-                    ip: '' // Será preenchido pelo servidor
-                };
-                
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(dadosAPI)
-                });
-                
-                if (response.ok) {
-                    console.log('✅ Dados enviados para API com sucesso!');
-                } else {
-                    console.warn('⚠️ Erro ao enviar dados para API:', response.status);
-                }
-            } catch (error) {
-                console.error('❌ Erro ao enviar dados para API:', error);
-                // Não exibir erro para o usuário para não interromper a experiência
-            }
+            const resultado = processarCalculo(dados);
+            exibirResultado(resultado);
         }
 
-        function calcularIndenizacao(dados) {
-            // Constantes
-            const TAXA_DESCONTO_FIXA = 0.127; // 12,7% fixo
-            
-            // Valor FIPE original
-            let valor_fipe_original = dados.valor_fipe;
+        function processarCalculo(dados) {
             let valor_base = dados.valor_fipe;
-            
-            // Depreciações (opcionais, manter da versão anterior)
+            let valor_fipe_original = valor_base;
             let depreciacoes_aplicadas = [];
             let total_depreciacao = 0;
-            
+
+            // Aplicar depreciações
             if (dados.leilao_sinistro) {
-                let valor_dep = valor_base * 0.25;
-                depreciacoes_aplicadas.push({
-                    tipo: 'Veículo de Leilão por Sinistro',
-                    percentual: 0.25,
-                    valor: valor_dep
-                });
-                total_depreciacao += valor_dep;
+                let valor = valor_base * 0.25;
+                depreciacoes_aplicadas.push({ tipo: 'Veículo de Leilão por Sinistro (-25%)', valor: valor });
+                total_depreciacao += valor;
             }
             
             if (dados.leilao_financeiro) {
-                let valor_dep = valor_base * 0.15;
-                depreciacoes_aplicadas.push({
-                    tipo: 'Veículo de Leilão Financeiro',
-                    percentual: 0.15,
-                    valor: valor_dep
-                });
-                total_depreciacao += valor_dep;
+                let valor = valor_base * 0.15;
+                depreciacoes_aplicadas.push({ tipo: 'Veículo de Leilão Financeiro (-15%)', valor: valor });
+                total_depreciacao += valor;
             }
             
             if (dados.beneficio_fiscal) {
-                let valor_dep = valor_base * 0.20;
-                depreciacoes_aplicadas.push({
-                    tipo: 'Benefício Fiscal IPI/ICMS',
-                    percentual: 0.20,
-                    valor: valor_dep
-                });
-                total_depreciacao += valor_dep;
+                let valor = valor_base * 0.20;
+                depreciacoes_aplicadas.push({ tipo: 'Benefício Fiscal IPI/ICMS (-20%)', valor: valor });
+                total_depreciacao += valor;
             }
             
-            if (dados.incendiado_submerso) {
-                let valor_dep = valor_base * 0.30;
-                depreciacoes_aplicadas.push({
-                    tipo: 'Incendiado/Submerso após Roubo',
-                    percentual: 0.30,
-                    valor: valor_dep
-                });
-                total_depreciacao += valor_dep;
+            if (dados.remarcado) {
+                let valor = valor_base * 0.20;
+                depreciacoes_aplicadas.push({ tipo: 'Veículo Remarcado (-20%)', valor: valor });
+                total_depreciacao += valor;
             }
             
             if (dados.rodas_som_sem_rastreador) {
-                let valor_dep = valor_base * 0.20;
-                depreciacoes_aplicadas.push({
-                    tipo: 'Rodas/Som sem Rastreador',
-                    percentual: 0.20,
-                    valor: valor_dep
-                });
-                total_depreciacao += valor_dep;
+                let valor = valor_base * 0.10;
+                depreciacoes_aplicadas.push({ tipo: 'Rodas/Som sem Rastreador (-10%)', valor: valor });
+                total_depreciacao += valor;
             }
             
-            if (dados.reducao_cota_valor && dados.reducao_cota_valor > 0) {
-                depreciacoes_aplicadas.push({
-                    tipo: 'Redução de Cota (Depreciação)',
-                    percentual: 0,
-                    valor: dados.reducao_cota_valor
-                });
-                total_depreciacao += dados.reducao_cota_valor;
+            if (dados.gnv) {
+                let valor = valor_base * 0.05;
+                depreciacoes_aplicadas.push({ tipo: 'Kit Gás (GNV) (-5%)', valor: valor });
+                total_depreciacao += valor;
+            }
+            
+            if (dados.antigo_fora_linha) {
+                let valor = valor_base * 0.10;
+                depreciacoes_aplicadas.push({ tipo: 'Veículo Antigo/Fora de Linha (-10%)', valor: valor });
+                total_depreciacao += valor;
             }
             
             // Valor após depreciações
@@ -998,65 +903,72 @@
             document.getElementById('detalhesAntecipacao').innerHTML = 
                 `<small>Desconto: R$ ${result.calculo_antecipacao.desconto_aplicado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} 
                 (${result.calculo_antecipacao.taxa_desconto_efetiva.toFixed(2)}%) | 
-                Taxa Implícita: ${result.calculo_antecipacao.taxa_implicita_mensal.toFixed(2)}% ao mês 
-                (${result.calculo_antecipacao.taxa_implicita_anual.toFixed(2)}% ao ano)</small>`;
+                Taxa Implícita: ${result.calculo_antecipacao.taxa_implicita_mensal.toFixed(2)}% a.m.</small>`;
 
-            // Valor FIPE
+            // Detalhamento
             document.getElementById('valorFipe').textContent = 
                 'R$ ' + result.dados_sinistro.valor_fipe.toLocaleString('pt-BR', {minimumFractionDigits: 2});
 
-            // Depreciações
-            const tabelaDepreciacoes = document.getElementById('tabelaDepreciacoes').querySelector('tbody');
-            tabelaDepreciacoes.innerHTML = '';
-            
-            if (result.depreciacao.aplicadas.length === 0) {
-                tabelaDepreciacoes.innerHTML = '<tr><td colspan="3" style="text-align:center">Nenhuma depreciação aplicada</td></tr>';
-            } else {
+            // Tabela Depreciações
+            const tbodyDep = document.querySelector('#tabelaDepreciacoes tbody');
+            tbodyDep.innerHTML = '';
+            if (result.depreciacao.aplicadas.length > 0) {
                 result.depreciacao.aplicadas.forEach(dep => {
-                    tabelaDepreciacoes.innerHTML += `
+                    tbodyDep.innerHTML += `
                         <tr>
                             <td>${dep.tipo}</td>
-                            <td>${(dep.percentual * 100).toFixed(2)}%</td>
+                            <td>-</td>
                             <td>R$ ${dep.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                         </tr>
                     `;
                 });
-            }
-
-            // Descontos
-            const tabelaDescontos = document.getElementById('tabelaDescontos').querySelector('tbody');
-            tabelaDescontos.innerHTML = '';
-            
-            result.descontos.itens.forEach(desc => {
-                tabelaDescontos.innerHTML += `
-                    <tr>
-                        <td>${desc.descricao}</td>
-                        <td>R$ ${desc.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                tbodyDep.innerHTML += `
+                    <tr style="font-weight: bold; background: #f0f0f0;">
+                        <td colspan="2">Total de Depreciações</td>
+                        <td>R$ ${result.depreciacao.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                     </tr>
                 `;
-            });
+            } else {
+                tbodyDep.innerHTML = '<tr><td colspan="3">Nenhuma depreciação aplicada.</td></tr>';
+            }
+
+            // Tabela Descontos
+            const tbodyDesc = document.querySelector('#tabelaDescontos tbody');
+            tbodyDesc.innerHTML = '';
+            if (result.descontos.itens.length > 0) {
+                result.descontos.itens.forEach(item => {
+                    tbodyDesc.innerHTML += `
+                        <tr>
+                            <td>${item.descricao}</td>
+                            <td>R$ ${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                tbodyDesc.innerHTML = '<tr><td colspan="2">Nenhum desconto adicional aplicado.</td></tr>';
+            }
 
             document.getElementById('totalDescontos').textContent = 
                 'R$ ' + result.descontos.total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            
+
             // Financiamento
-            const fin = result.financiamento;
-            document.getElementById('valorOperacao').textContent = 
-                'R$ ' + fin.valor_operacao.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            document.getElementById('taxaJuros').textContent = 
-                fin.taxa_mensal_pct.toFixed(2) + '% ao mês';
-            document.getElementById('totalPagar').textContent = 
-                'R$ ' + fin.total_geral.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            document.getElementById('custoFinanceiro').textContent = 
-                'R$ ' + fin.custo_financeiro.toLocaleString('pt-BR', {minimumFractionDigits: 2}) + 
-                ' (' + fin.percentual_custo.toFixed(2) + '%)';
-            
-            const tabelaParcelas = document.getElementById('tabelaParcelas').querySelector('tbody');
-            tabelaParcelas.innerHTML = '';
-            fin.parcelas.forEach(p => {
-                tabelaParcelas.innerHTML += `
+            document.getElementById('finValorOperacao').textContent = 
+                'R$ ' + result.financiamento.valor_operacao.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            document.getElementById('finTaxaJuros').textContent = 
+                result.financiamento.taxa_mensal_pct.toFixed(2) + '% a.m.';
+            document.getElementById('finTotalPagar').textContent = 
+                'R$ ' + result.financiamento.total_geral.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            document.getElementById('finCustoFinanceiro').textContent = 
+                'R$ ' + result.financiamento.custo_financeiro.toLocaleString('pt-BR', {minimumFractionDigits: 2}) + 
+                ' (' + result.financiamento.percentual_custo.toFixed(2) + '%)';
+
+            // Tabela Parcelas
+            const tbodyParc = document.querySelector('#tabelaParcelas tbody');
+            tbodyParc.innerHTML = '';
+            result.financiamento.parcelas.forEach(p => {
+                tbodyParc.innerHTML += `
                     <tr>
-                        <td>${p.numero}ª</td>
+                        <td>${p.numero}</td>
                         <td>${p.vencimento}</td>
                         <td>R$ ${p.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                     </tr>
@@ -1065,132 +977,160 @@
         }
 
         function imprimirResultado() {
+            console.log('Iniciando impressão...');
             if (!window.ultimoCalculo) {
+                console.error('Dados do cálculo não encontrados!');
                 alert('Por favor, calcule a indenização primeiro!');
                 return;
             }
             
             const dados = window.ultimoCalculo;
+            console.log('Dados para impressão:', dados);
             
             // Criar container temporário para impressão
             const printContainer = document.createElement('div');
             printContainer.id = 'print-container';
             printContainer.innerHTML = `
-                <h1>Cálculo para Indenização Financeira - Total</h1>
-                    <h2>Cenário 01: ${dados.dados_sinistro.nome}</h2>
-                    
-                    <h2>Dados do Sinistro</h2>
+                <style>
+                    @media print {
+                        @page { margin: 1cm; }
+                        body { font-family: 'Segoe UI', Arial, sans-serif; color: #333; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                        .header-print { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+                        .header-print h1 { color: #667eea; font-size: 24px; margin: 0; }
+                        .alert-box { background-color: #e0f2f1; color: #00695c; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; border-left: 4px solid #00695c; }
+                        .card-print { background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 15px; border: 1px solid #e9ecef; }
+                        .card-title { color: #667eea; font-size: 16px; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #dee2e6; padding-bottom: 5px; display: flex; align-items: center; }
+                        .grid-print { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+                        .field-label { font-size: 12px; color: #666; font-weight: bold; }
+                        .field-value { font-size: 14px; color: #333; margin-bottom: 5px; }
+                        .highlight-value { background: #e8eaf6; padding: 15px; text-align: center; border-radius: 8px; margin: 20px 0; }
+                        .highlight-value h3 { color: #667eea; margin: 0 0 5px 0; font-size: 16px; }
+                        .highlight-value .value { color: #283593; font-size: 28px; font-weight: bold; }
+                        .options-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+                        .option-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: white; }
+                        .option-card.recommended { border: 2px solid #4caf50; background: #f1f8e9; position: relative; }
+                        .option-title { font-weight: bold; color: #1565c0; margin-bottom: 10px; font-size: 14px; }
+                        .option-value { font-size: 22px; font-weight: bold; color: #2e7d32; margin-bottom: 10px; }
+                        .option-details { font-size: 12px; color: #555; line-height: 1.4; }
+                        .recommendation-banner { background: #fff9c4; color: #fbc02d; padding: 10px; text-align: center; font-weight: bold; border-radius: 5px; margin-bottom: 20px; border: 1px solid #fbc02d; color: #f57f17; }
+                        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+                        th { background: #f1f1f1; text-align: left; padding: 8px; color: #555; }
+                        td { border-bottom: 1px solid #eee; padding: 8px; }
+                        .text-right { text-align: right; }
+                        .footer-print { margin-top: 30px; font-size: 10px; color: #999; text-align: center; border-top: 1px solid #eee; padding-top: 10px; }
+                    }
+                </style>
+
+                <div class="header-print">
+                    <h1>Relatório de Cálculo SMA</h1>
+                    <div style="font-size: 12px; color: #666;">Data: ${new Date().toLocaleDateString('pt-BR')}</div>
+                </div>
+
+                <div class="alert-box">
+                    Cálculo baseado nos valores informados. Taxas e prazos podem variar conforme regulamento.
+                </div>
+
+                <div class="card-print">
+                    <div class="card-title">👤 Dados do Beneficiário</div>
+                    <div class="grid-print">
+                        <div>
+                            <div class="field-label">Nome:</div>
+                            <div class="field-value">${dados.dados_sinistro.associado}</div>
+                            <div class="field-label">Veículo:</div>
+                            <div class="field-value">${dados.dados_sinistro.veiculo}</div>
+                        </div>
+                        <div>
+                            <div class="field-label">Placa:</div>
+                            <div class="field-value">${dados.dados_sinistro.placa}</div>
+                            <div class="field-label">Data de Entrega Doc.:</div>
+                            <div class="field-value">${dados.dados_sinistro.data_entrega_documentacao}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-print">
+                    <div class="card-title">📊 Valores do Sinistro</div>
+                    <div class="grid-print" style="grid-template-columns: 1fr 1fr 1fr;">
+                        <div>
+                            <div class="field-label">Valor FIPE:</div>
+                            <div class="field-value">R$ ${dados.dados_sinistro.valor_fipe.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                        </div>
+                        <div>
+                            <div class="field-label">Total Depreciações:</div>
+                            <div class="field-value" style="color: #d32f2f;">- R$ ${dados.depreciacao.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                        </div>
+                        <div>
+                            <div class="field-label">Total Descontos:</div>
+                            <div class="field-value" style="color: #d32f2f;">- R$ ${dados.descontos.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-value">
+                    <h3>Valor Base para Cálculo (Líquido)</h3>
+                    <div class="value">R$ ${dados.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                    <div style="font-size: 12px; color: #666; margin-top: 5px;">Prazo Regulamentar: ${dados.dados_sinistro.dias_uteis} dias úteis</div>
+                </div>
+
+                <div class="card-title" style="margin-bottom: 15px;">⚡ Opções de Pagamento</div>
+                
+                <div class="options-container">
+                    <div class="option-card">
+                        <div class="option-title">Opção 1: Aguardar Prazo Regulamentar</div>
+                        <div class="option-value" style="color: #1976d2;">R$ ${dados.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                        <div class="option-details">
+                            <p><strong>Prazo:</strong> ${dados.dados_sinistro.dias_uteis} dias úteis</p>
+                            <p><strong>Vantagens:</strong> Valor integral sem desconto.</p>
+                            <p><strong>Desvantagens:</strong> Tempo de espera maior.</p>
+                        </div>
+                    </div>
+
+                    <div class="option-card recommended">
+                        <div style="position: absolute; top: -10px; right: 10px; background: #4caf50; color: white; padding: 2px 8px; font-size: 10px; border-radius: 4px;">RECOMENDADO</div>
+                        <div class="option-title" style="color: #2e7d32;">Opção 2: Receber Antecipado</div>
+                        <div class="option-value">R$ ${dados.calculo_antecipacao.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                        <div class="option-details">
+                            <p><strong>Prazo:</strong> Imediato (Hoje)</p>
+                            <p><strong>Vantagens:</strong> Dinheiro na mão agora.</p>
+                            <p><strong>Desconto:</strong> R$ ${dados.calculo_antecipacao.desconto_aplicado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} (${dados.calculo_antecipacao.taxa_desconto_efetiva.toFixed(2)}%)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recommendation-banner">
+                    Recomendação: A Opção 2 oferece liquidez imediata e elimina o risco de espera.
+                </div>
+
+                <div class="card-print">
+                    <div class="card-title">💳 Uso da Associação (Detalhamento do Financiamento - Antecipação)</div>
+                    <div style="background: #e8eaf6; padding: 10px; border-radius: 5px; margin-bottom: 10px; font-size: 12px;">
+                        <strong>Valor da Operação:</strong> R$ ${dados.calculo_antecipacao.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} | 
+                        <strong>Taxa de Juros:</strong> ${dados.financiamento.taxa_mensal_pct.toFixed(2)}% a.m. | 
+                        <strong>Total a Pagar:</strong> R$ ${dados.financiamento.total_geral.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+                    </div>
                     <table>
                         <thead>
                             <tr>
-                                <th>Item</th>
-                                <th>Descrição</th>
+                                <th>Parcela</th>
+                                <th>Vencimento</th>
+                                <th class="text-right">Valor</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Associado</td>
-                                <td>${dados.dados_sinistro.nome}</td>
-                            </tr>
-                            <tr>
-                                <td>Veículo</td>
-                                <td>${dados.dados_sinistro.veiculo}</td>
-                            </tr>
-                            <tr>
-                                <td>Placa</td>
-                                <td>${dados.dados_sinistro.placa}</td>
-                            </tr>
-                            <tr>
-                                <td>Valor FIPE</td>
-                                <td>R$ ${dados.dados_sinistro.valor_fipe.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            <tr>
-                                <td>Entrega da Documentação</td>
-                                <td>${dados.dados_sinistro.data_entrega_documentacao}</td>
-                            </tr>
-                            <tr>
-                                <td>Limite para Pagamento</td>
-                                <td>${dados.dados_sinistro.limite_pagamento} (${dados.dados_sinistro.dias_uteis} dias úteis)</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <h2>Depreciações (Leilão)</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Descrição</th>
-                                <th>Valor (R$)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${dados.depreciacao.aplicadas.length > 0 ? 
-                                dados.depreciacao.aplicadas.map(dep => `
-                                    <tr>
-                                        <td>${dep.tipo}</td>
-                                        <td>${dep.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                                    </tr>
-                                `).join('') + `
-                                    <tr>
-                                        <td>Total de Depreciações</td>
-                                        <td>${dados.depreciacao.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                                    </tr>
-                                ` : `
-                                    <tr>
-                                        <td colspan="2" style="text-align: center;">Nenhuma depreciação aplicada</td>
-                                    </tr>
-                                `
-                            }
-                        </tbody>
-                    </table>
-                    
-                    <h2>Composição dos Descontos</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Descrição</th>
-                                <th>Valor (R$)</th>
-                            </tr>
-                   ${dados.descontos.itens.map(item => `
+                            ${dados.financiamento.parcelas.map(p => `
                                 <tr>
-                                    <td>${item.descricao}</td>
-                                    <td>${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                                    <td>${p.numero}</td>
+                                    <td>${p.vencimento}</td>
+                                    <td class="text-right">R$ ${p.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                                 </tr>
-                            `).join('')}            <td>Total de Descontos</td>
-                                <td>${dados.descontos.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
+                            `).join('')}
                         </tbody>
                     </table>
-                    
-                    <h2>Cálculo da Antecipação</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Métrica</th>
-                                <th>Valor</th>
-                            </tr>
-                        </thead>
-                <tr>
-                                <td>Valor a Receber em ${dados.dados_sinistro.dias_uteis} Dias</td>
-                                <td>R$ ${dados.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            <tr>
-                                <td>Taxa Implícita Mensal (${dados.dados_sinistro.dias_uteis} dias)</td>
-                                <td>${dados.calculo_antecipacao.taxa_implicita_mensal.toFixed(2)}%</td>
-                            </tr>
-                            <tr>
-                                <td>Taxa Implícita Anual</td>
-                                <td>${dados.calculo_antecipacao.taxa_implicita_anual.toFixed(2)}%</td>
-                            </tr>
-                            <tr>
-                                <td>Valor Antecipado (Pagamento Imediato)</td>
-                                <td>R$ ${dados.calculo_antecipacao.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            <tr>
-                                <td>Desconto Aplicado</td>
-                                <td>R$ ${dados.calculo_antecipacao.desconto_aplicado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>                        </tbody>
-                    </table>
+                </div>
+
+                <div class="footer-print">
+                    Administradora Mutual - Sistema de Cálculo SMT | Gerado em ${new Date().toLocaleString('pt-BR')}
+                </div>
             `;
             
             // Adicionar ao body
@@ -1209,214 +1149,104 @@
             }, 100);
         }
 
-        console.log('Iniciando impressão...');
+        async function gerarPDF() {
             if (!window.ultimoCalculo) {
-                console.error('Dados do cálculo não encontrados!');
                 alert('Por favor, calcule a indenização primeiro!');
                 return;
             }
             
             const dados = window.ultimoCalculo;
-            console.log('Dados para impressão:', dados);           const nomeAssociado = dados.dados_sinistro.associado;
+            const nomeAssociado = dados.dados_sinistro.associado;
             
             // Formatar data para DD/MM/AAAA
             const formatarData = (dataStr) => {
                 const data = new Date(dataStr + 'T00:00:00');
                 return data.toLocaleDateString('pt-BR');
             };
-            
-            // Preparar HTML profissional baseado no modelo
-            const conteudoPDF = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Cenário 01: ${nomeAssociado}</title>
-                    <style>
-                        @page { margin: 2cm; }
-                        body {
-                            font-family: Arial, sans-serif;
-                            padding: 40px;
-                            background: white;
-                            color: #333;
-                        }
-                        h1 {
-                            text-align: center;
-                            font-size: 24px;
-                            font-weight: bold;
-                            margin-bottom: 40px;
-                            color: #000;
-                        }
-                        h2 {
-                            font-size: 18px;
-                            font-weight: bold;
-                            margin-top: 30px;
-                            margin-bottom: 15px;
-                            color: #000;
-                        }
-                        table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            margin-bottom: 30px;
-                        }
-                        th, td {
-                            border: 1px solid #999;
-                            padding: 10px;
-                            text-align: left;
-                        }
-                        th {
-                            background-color: #E0E0E0;
-                            font-weight: bold;
-                        }
-                        td.valor {
-                            text-align: right;
-                        }
-                        tr.total {
-                            font-weight: bold;
-                        }
-                        @media print {
-                            body { padding: 20px; }
-                            button { display: none; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <h1>Cálculo para Indenização Financeira - Total</h1>
-                    <h2>Cenário 01: ${nomeAssociado}</h2>
-                    
-                    <h2>Dados do Sinistro</h2>
-                    <table>
-                        <thead>
+
+            // Criar conteúdo HTML para o PDF
+            const element = document.createElement('div');
+            element.innerHTML = `
+                <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+                    <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #1e5799; padding-bottom: 10px;">
+                        <h1 style="color: #1e5799; margin: 0;">Cálculo para Indenização Financeira - Total</h1>
+                        <p style="color: #666; margin: 5px 0;">Movimento Mais Brasil - Socorro Mútuo Total</p>
+                    </div>
+
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                        <h3 style="color: #1e5799; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Dados do Sinistro</h3>
+                        <table style="width: 100%; border-collapse: collapse;">
                             <tr>
-                                <th>Item</th>
-                                <th>Descrição</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Associado</td>
-                                <td>${dados.dados_sinistro.associado}</td>
+                                <td style="padding: 5px;"><strong>Beneficiário:</strong> ${dados.dados_sinistro.associado}</td>
+                                <td style="padding: 5px;"><strong>Veículo:</strong> ${dados.dados_sinistro.veiculo}</td>
                             </tr>
                             <tr>
-                                <td>Veículo</td>
-                                <td>${dados.dados_sinistro.veiculo}</td>
+                                <td style="padding: 5px;"><strong>Placa:</strong> ${dados.dados_sinistro.placa}</td>
+                                <td style="padding: 5px;"><strong>Valor FIPE:</strong> R$ ${dados.dados_sinistro.valor_fipe.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #1e5799; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Detalhamento Financeiro</h3>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+                            <tr style="background: #f1f1f1;">
+                                <th style="padding: 8px; text-align: left;">Descrição</th>
+                                <th style="padding: 8px; text-align: right;">Valor</th>
                             </tr>
                             <tr>
-                                <td>Placa</td>
-                                <td>${dados.dados_sinistro.placa}</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Valor Base (FIPE)</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">R$ ${dados.dados_sinistro.valor_fipe.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                             </tr>
                             <tr>
-                                <td>Valor FIPE</td>
-                                <td>R$ ${dados.dados_sinistro.valor_fipe.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Total Depreciações</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; color: #dc3545;">- R$ ${dados.depreciacao.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                             </tr>
                             <tr>
-                                <td>Entrega da Documentação</td>
-                                <td>${dados.dados_sinistro.data_entrega_documentacao}</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Total Descontos</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; color: #dc3545;">- R$ ${dados.descontos.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                             </tr>
-                            <tr>
-                                <td>Limite para Pagamento</td>
-                                <td>${dados.dados_sinistro.limite_pagamento} (${dados.dados_sinistro.dias_uteis} dias úteis)</td>
+                            <tr style="background: #e3f2fd; font-weight: bold;">
+                                <td style="padding: 8px;">Valor Líquido a Receber</td>
+                                <td style="padding: 8px; text-align: right; color: #1e5799;">R$ ${dados.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                             </tr>
-                        </tbody>
-                    </table>
-                    
-                    <h2>Depreciações (Leilão)</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Descrição</th>
-                                <th class="valor">Valor (R$)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${dados.depreciacao.aplicadas.length > 0 ? dados.depreciacao.aplicadas.map(item => `
-                                <tr>
-                                    <td>${item.tipo}</td>
-                                    <td class="valor">${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                                </tr>
-                            `).join('') : '<tr><td colspan="2" style="text-align: center;">Nenhuma depreciação aplicada</td></tr>'}
-                            ${dados.depreciacao.total > 0 ? `
-                            <tr class="total">
-                                <td>Total de Depreciações</td>
-                                <td class="valor">${dados.depreciacao.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            ` : ''}
-                        </tbody>
-                    </table>
-                    
-                    <h2>Composição dos Descontos</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Descrição</th>
-                                <th class="valor">Valor (R$)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${dados.descontos.itens.map(item => `
-                                <tr>
-                                    <td>${item.descricao}</td>
-                                    <td class="valor">${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                                </tr>
-                            `).join('')}
-                            <tr class="total">
-                                <td>Total de Descontos</td>
-                                <td class="valor">${dados.descontos.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <h2>Cálculo da Antecipação</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Métrica</th>
-                                <th class="valor">Valor</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Valor a Receber em ${dados.dados_sinistro.dias_uteis} Dias</td>
-                                <td class="valor">R$ ${dados.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            <tr>
-                                <td>Taxa Implícita Mensal (${dados.dados_sinistro.dias_uteis} dias)</td>
-                                <td class="valor">${dados.calculo_antecipacao.taxa_implicita_mensal.toFixed(2)}%</td>
-                            </tr>
-                            <tr>
-                                <td>Taxa Implícita Anual</td>
-                                <td class="valor">${dados.calculo_antecipacao.taxa_implicita_anual.toFixed(2)}%</td>
-                            </tr>
-                            <tr>
-                                <td>Valor Antecipado (Pagamento Imediato)</td>
-                                <td class="valor">R$ ${dados.calculo_antecipacao.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            <tr>
-                                <td>Desconto Aplicado</td>
-                                <td class="valor">R$ ${dados.calculo_antecipacao.desconto_aplicado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </body>
-                </html>
+                        </table>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #1e5799; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Opções de Pagamento</h3>
+                        
+                        <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+                            <strong>Opção 1: Aguardar Prazo Regulamentar</strong><br>
+                            Receber R$ ${dados.calculo_antecipacao.valor_a_receber.toLocaleString('pt-BR', {minimumFractionDigits: 2})} em ${dados.dados_sinistro.dias_uteis} dias úteis.
+                        </div>
+
+                        <div style="border: 2px solid #28a745; background: #f0fff4; padding: 10px; border-radius: 5px;">
+                            <strong>Opção 2: Receber Antecipado (Recomendado)</strong><br>
+                            Receber R$ ${dados.calculo_antecipacao.valor_antecipado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} HOJE.<br>
+                            <small>Desconto aplicado: R$ ${dados.calculo_antecipacao.desconto_aplicado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</small>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 10px; color: #999; text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 10px;">
+                        Gerado em ${new Date().toLocaleString('pt-BR')}
+                    </div>
+                </div>
             `;
-            
-            // Criar um Blob com o conteúdo HTML
-            const blob = new Blob([conteudoPDF], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            
-            // Criar link temporário para download
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Calculo_Indenizacao_Total_${nomeAssociado.replace(/\s+/g, '_')}.html`;
-            document.body.appendChild(a);
-            a.click();
-            
-            // Limpar
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+
+            // Configurações do html2pdf
+            const opt = {
+                margin: 10,
+                filename: `Calculo_Indenizacao_Total_${nomeAssociado.replace(/\s+/g, '_')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Gerar e baixar o PDF
+            html2pdf().set(opt).from(element).save();
         }
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </body>
 </html>
-
