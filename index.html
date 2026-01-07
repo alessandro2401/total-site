@@ -612,6 +612,7 @@
     <script>
         // Constantes
         const TAXA_DESCONTO_FIXA = 0.127; // 12.7%
+        const API_URL = 'https://api-calculadoras-sheets.vercel.app/api/registrar-calculo-smt';
 
         document.getElementById('formCalculadora').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -654,6 +655,59 @@
 
             const resultado = processarCalculo(dados);
             exibirResultado(resultado);
+            
+            // Enviar dados para a planilha (API)
+            enviarDadosAPI(dados, resultado);
+        }
+
+        async function enviarDadosAPI(dadosEntrada, resultado) {
+            try {
+                // Preparar payload conforme esperado pela API
+                const dadosAPI = {
+                    data_calculo: new Date().toISOString(),
+                    associado: dadosEntrada.nome_associado,
+                    veiculo: dadosEntrada.veiculo,
+                    placa: dadosEntrada.placa,
+                    valor_fipe: dadosEntrada.valor_fipe,
+                    tipo_sinistro: dadosEntrada.tipo_sinistro,
+                    
+                    // Valores calculados
+                    total_depreciacao: resultado.depreciacao.total,
+                    total_descontos: resultado.descontos.total,
+                    valor_liquido: resultado.calculo_antecipacao.valor_a_receber,
+                    valor_antecipado: resultado.calculo_antecipacao.valor_antecipado,
+                    
+                    // Detalhes para auditoria
+                    detalhes: {
+                        depreciacoes: resultado.depreciacao.aplicadas.map(d => d.tipo).join(', '),
+                        descontos: resultado.descontos.itens.map(d => d.descricao).join(', '),
+                        dias_uteis: dadosEntrada.dias_uteis_pagamento
+                    },
+                    
+                    // Metadados
+                    userAgent: navigator.userAgent,
+                    origem: 'total-site'
+                };
+                
+                console.log('Enviando dados para API...', dadosAPI);
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dadosAPI)
+                });
+                
+                if (response.ok) {
+                    console.log('✅ Dados enviados para API com sucesso!');
+                } else {
+                    console.warn('⚠️ Erro ao enviar dados para API:', response.status);
+                }
+            } catch (error) {
+                console.error('❌ Erro ao enviar dados para API:', error);
+                // Não exibir erro para o usuário para não interromper a experiência
+            }
         }
 
         function processarCalculo(dados) {
