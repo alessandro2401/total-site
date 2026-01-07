@@ -1151,30 +1151,12 @@
                                 <th>Descrição</th>
                                 <th>Valor (R$)</th>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>12 Contribuições</td>
-                                <td>${dados.descontos.contribuicoes.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            <tr>
-                                <td>Despachante</td>
-                                <td>${dados.descontos.despachante.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            <tr>
-                                <td>Prévia Financiamento</td>
-                                <td>${dados.descontos.financiamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            <tr>
-                                <td>Baixa do Gravame</td>
-                                <td>${dados.descontos.gravame.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            <tr>
-                                <td>2ª Via ATPVE</td>
-                                <td>${dados.descontos.atpve.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            </tr>
-                            <tr>
-                                <td>Total de Descontos</td>
+                   ${dados.descontos.itens.map(item => `
+                                <tr>
+                                    <td>${item.descricao}</td>
+                                    <td>${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                                </tr>
+                            `).join('')}            <td>Total de Descontos</td>
                                 <td>${dados.descontos.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                             </tr>
                         </tbody>
@@ -1227,14 +1209,15 @@
             }, 100);
         }
 
-        async function gerarPDF() {
+        console.log('Iniciando impressão...');
             if (!window.ultimoCalculo) {
+                console.error('Dados do cálculo não encontrados!');
                 alert('Por favor, calcule a indenização primeiro!');
                 return;
             }
             
             const dados = window.ultimoCalculo;
-            const nomeAssociado = dados.dados_sinistro.associado;
+            console.log('Dados para impressão:', dados);           const nomeAssociado = dados.dados_sinistro.associado;
             
             // Formatar data para DD/MM/AAAA
             const formatarData = (dataStr) => {
