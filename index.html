@@ -1231,14 +1231,19 @@
             // Criar conteúdo HTML para o PDF
             const element = document.createElement('div');
             element.innerHTML = `
-                <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-                    <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #1e5799; padding-bottom: 10px;">
+                <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; width: 100%; box-sizing: border-box;">
+                    <style>
+                        .pdf-card { page-break-inside: avoid; margin-bottom: 20px; }
+                        .pdf-header { page-break-after: avoid; }
+                        tr { page-break-inside: avoid; }
+                    </style>
+                    <div class="pdf-header" style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #1e5799; padding-bottom: 10px;">
                         <h1 style="color: #1e5799; margin: 0;">Cálculo para Indenização Financeira - Total</h1>
                         <p style="color: #666; margin: 5px 0;">Movimento Mais Brasil - Socorro Mútuo Total</p>
                     </div>
 
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-                        <h3 style="color: #1e5799; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Dados do Sinistro</h3>
+                    <div class="pdf-card" style="background: #f8f9fa; padding: 15px; border-radius: 5px;">
+                        <h3 style="color: #1e5799; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 0;">Dados do Sinistro</h3>
                         <table style="width: 100%; border-collapse: collapse;">
                             <tr>
                                 <td style="padding: 5px;"><strong>Beneficiário:</strong> ${dados.dados_sinistro.associado}</td>
@@ -1251,8 +1256,8 @@
                         </table>
                     </div>
 
-                    <div style="margin-bottom: 20px;">
-                        <h3 style="color: #1e5799; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Detalhamento Financeiro</h3>
+                    <div class="pdf-card">
+                        <h3 style="color: #1e5799; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 0;">Detalhamento Financeiro</h3>
                         <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
                             <tr style="background: #f1f1f1;">
                                 <th style="padding: 8px; text-align: left;">Descrição</th>
@@ -1277,8 +1282,8 @@
                         </table>
                     </div>
 
-                    <div style="margin-bottom: 20px;">
-                        <h3 style="color: #1e5799; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Opções de Pagamento</h3>
+                    <div class="pdf-card">
+                        <h3 style="color: #1e5799; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 0;">Opções de Pagamento</h3>
                         
                         <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
                             <strong>Opção 1: Aguardar Prazo Regulamentar</strong><br>
@@ -1300,11 +1305,16 @@
 
             // Configurações do html2pdf
             const opt = {
-                margin: 10,
+                margin: [10, 10, 10, 10], // top, left, bottom, right
                 filename: `Calculo_Indenizacao_Total_${nomeAssociado.replace(/\s+/g, '_')}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    letterRendering: true
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
             // Gerar e baixar o PDF
