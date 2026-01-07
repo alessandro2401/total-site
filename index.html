@@ -672,31 +672,45 @@
 
         async function enviarDadosAPI(dadosEntrada, resultado) {
             try {
-                // Preparar payload conforme esperado pela API
+                // Preparar payload conforme esperado pela API (Formato CamelCase)
                 const dadosAPI = {
-                    data_calculo: new Date().toISOString(),
-                    associado: dadosEntrada.nome_associado,
-                    veiculo: dadosEntrada.veiculo,
-                    placa: dadosEntrada.placa,
-                    valor_fipe: dadosEntrada.valor_fipe,
-                    tipo_sinistro: dadosEntrada.tipo_sinistro,
+                    // Dados do Beneficiário e Veículo
+                    nomeBeneficiario: dadosEntrada.nome_associado || '',
+                    placaVeiculo: dadosEntrada.placa || '',
+                    modeloVeiculo: dadosEntrada.veiculo || '',
                     
-                    // Valores calculados
-                    total_depreciacao: resultado.depreciacao.total,
-                    total_descontos: resultado.descontos.total,
-                    valor_liquido: resultado.calculo_antecipacao.valor_a_receber,
-                    valor_antecipado: resultado.calculo_antecipacao.valor_antecipado,
+                    // Dados do Sinistro
+                    tipoSinistro: dadosEntrada.tipo_sinistro || 'Perda Total',
+                    valorVeiculo: dadosEntrada.valor_fipe || 0,
+                    valorFranquia: 0, // Não aplicável para SMT Total
+                    valorDespesas: resultado.descontos.total || 0,
+                    valorSalvados: 0,
+                    valorRecuperado: 0,
+                    valorIndenizacao: resultado.calculo_antecipacao.valor_a_receber || 0,
+                    valorAntecipado: resultado.calculo_antecipacao.valor_antecipado || 0,
+                    valorRestante: resultado.calculo_antecipacao.desconto_aplicado || 0, // Usando campo valorRestante para armazenar o desconto
                     
-                    // Detalhes para auditoria
-                    detalhes: {
-                        depreciacoes: resultado.depreciacao.aplicadas.map(d => d.tipo).join(', '),
-                        descontos: resultado.descontos.itens.map(d => d.descricao).join(', '),
-                        dias_uteis: dadosEntrada.dias_uteis_pagamento
-                    },
+                    // Financiamento
+                    taxaJuros: (dadosEntrada.taxa_juros * 100) || 0,
+                    numeroParcelas: dadosEntrada.n_parcelas || 0,
+                    valorParcela: resultado.financiamento.parcelas[0]?.valor || 0,
+                    totalPagar: resultado.financiamento.total_geral || 0,
+                    custoFinanceiro: resultado.financiamento.custo_financeiro || 0,
+                    percentualCusto: resultado.financiamento.percentual_custo || 0,
+                    
+                    // Parcelas (até 12)
+                    parcela1Data: resultado.financiamento.parcelas[0]?.vencimento || '',
+                    parcela1Valor: resultado.financiamento.parcelas[0]?.valor || 0,
+                    parcela2Data: resultado.financiamento.parcelas[1]?.vencimento || '',
+                    parcela2Valor: resultado.financiamento.parcelas[1]?.valor || 0,
+                    parcela3Data: resultado.financiamento.parcelas[2]?.vencimento || '',
+                    parcela3Valor: resultado.financiamento.parcelas[2]?.valor || 0,
+                    parcela4Data: resultado.financiamento.parcelas[3]?.vencimento || '',
+                    parcela4Valor: resultado.financiamento.parcelas[3]?.valor || 0,
                     
                     // Metadados
                     userAgent: navigator.userAgent,
-                    origem: 'total-site'
+                    ip: '' // Será preenchido pelo servidor
                 };
                 
                 console.log('Enviando dados para API...', dadosAPI);
